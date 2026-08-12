@@ -21,46 +21,73 @@
       <!-- Módulo de Comunicados General -->
       <section class="card">
         <h3>Tablón de Comunicados e Avisos</h3>
-        <ul id="announcementsList" class="data-list">
-          <li>Bienvenido al ciclo lectivo 2026. Las clases inician a las 7:00 AM.</li>
-          <li>Reunión general de padres de familia el próximo viernes.</li>
-        </ul>
+        <ul id="announcementsList" class="data-list"></ul>
+
+        <!-- Formulario para publicar aviso (Solo Admin y Docentes) -->
+        <form id="addNoticeForm" style="display: none; margin-top: 1rem;">
+          <div class="form-group">
+            <input type="text" id="noticeInput" placeholder="Escribe un comunicado o aviso oficial..." required>
+          </div>
+          <button type="submit" class="btn-action">+ Publicar Aviso</button>
+        </form>
       </section>
 
-      <!-- Secciones dinámicas por Rol -->
+      <!-- Módulo de Administración: Gestión de Usuarios -->
       <section id="adminSection" class="card role-section" style="display: none;">
         <h3>Gestión de Usuarios (Administración)</h3>
-        <p>Panel para registrar y administrar perfiles de docentes y alumnos.</p>
-        <button class="btn-action">+ Agregar Nuevo Usuario</button>
+        <form id="addUserForm" style="margin-bottom: 1rem;">
+          <div class="form-group">
+            <label for="newUsername">Nombre de Usuario</label>
+            <input type="text" id="newUsername" placeholder="Ej. juan_perez" required>
+          </div>
+          <div class="form-group">
+            <label for="newUserRole">Rol asignado</label>
+            <select id="newUserRole" required>
+              <option value="docente">Docente</option>
+              <option value="estudiante">Estudiante / Familia</option>
+            </select>
+          </div>
+          <button type="submit" class="btn-action">+ Registrar Usuario</button>
+        </form>
+
+        <h4>Usuarios Registrados</h4>
+        <ul id="usersList" class="data-list" style="margin-top: 0.5rem;"></ul>
       </section>
 
+      <!-- Módulo Docente: Registro de Calificaciones -->
       <section id="teacherSection" class="card role-section" style="display: none;">
-        <h3>Módulo Académico (Docentes)</h3>
-        <p>Registro y actualización de calificaciones y asistencia.</p>
-        <button class="btn-action">Cargar Calificaciones</button>
+        <h3>Módulo Académico — Registro de Calificaciones</h3>
+        <form id="addGradeForm">
+          <div class="form-group">
+            <label for="studentName">Nombre del Estudiante</label>
+            <input type="text" id="studentName" placeholder="Ej. Ana Gómez" required>
+          </div>
+          <div class="form-group">
+            <label for="subjectName">Asignatura</label>
+            <input type="text" id="subjectName" placeholder="Ej. Matemáticas" required>
+          </div>
+          <div class="form-group">
+            <label for="gradeScore">Calificación (0 - 100)</label>
+            <input type="number" id="gradeScore" min="0" max="100" placeholder="Ej. 95" required>
+          </div>
+          <button type="submit" class="btn-action">Guardar Calificación</button>
+        </form>
       </section>
 
+      <!-- Módulo Estudiante / Familia: Consulta de Notas -->
       <section id="studentSection" class="card role-section" style="display: none;">
-        <h3>Mis Calificaciones (Estudiantes / Familias)</h3>
+        <h3>Boleta de Calificaciones (Estudiantes / Familias)</h3>
         <table class="data-table">
           <thead>
             <tr>
+              <th>Estudiante</th>
               <th>Asignatura</th>
-              <th>Nota</th>
+              <th>Calificación</th>
               <th>Estado</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>Matemáticas</td>
-              <td>95</td>
-              <td>Aprobado</td>
-            </tr>
-            <tr>
-              <td>Español</td>
-              <td>88</td>
-              <td>Aprobado</td>
-            </tr>
+          <tbody id="gradesTableBody">
+            <!-- Se cargan dinámicamente -->
           </tbody>
         </table>
       </section>
