@@ -16,5 +16,5 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
   localStorage.setItem('userSession', JSON.stringify(userSession));
 
   alertBox.style.display = 'none';
-  alert(`¡Bienvenido/a, ${username}! Has ingresado con el rol: ${role.toUpperCase()}`);
+  window.location.href = 'dashboard.html';
 });

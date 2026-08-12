@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intranet Escolar — Panel Principal</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="dashboard-container">
+    <header class="navbar">
+      <h2>Intranet Escolar</h2>
+      <div class="user-info">
+        <span id="welcomeUser">Cargando...</span>
+        <button id="logoutBtn" class="btn-logout">Cerrar Sesión</button>
+      </div>
+    </header>
+
+    <main class="content">
+      <!-- Módulo de Comunicados General -->
+      <section class="card">
+        <h3>Tablón de Comunicados e Avisos</h3>
+        <ul id="announcementsList" class="data-list">
+          <li>Bienvenido al ciclo lectivo 2026. Las clases inician a las 7:00 AM.</li>
+          <li>Reunión general de padres de familia el próximo viernes.</li>
+        </ul>
+      </section>
+
+      <!-- Secciones dinámicas por Rol -->
+      <section id="adminSection" class="card role-section" style="display: none;">
+        <h3>Gestión de Usuarios (Administración)</h3>
+        <p>Panel para registrar y administrar perfiles de docentes y alumnos.</p>
+        <button class="btn-action">+ Agregar Nuevo Usuario</button>
+      </section>
+
+      <section id="teacherSection" class="card role-section" style="display: none;">
+        <h3>Módulo Académico (Docentes)</h3>
+        <p>Registro y actualización de calificaciones y asistencia.</p>
+        <button class="btn-action">Cargar Calificaciones</button>
+      </section>
+
+      <section id="studentSection" class="card role-section" style="display: none;">
+        <h3>Mis Calificaciones (Estudiantes / Familias)</h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Asignatura</th>
+              <th>Nota</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Matemáticas</td>
+              <td>95</td>
+              <td>Aprobado</td>
+            </tr>
+            <tr>
+              <td>Español</td>
+              <td>88</td>
+              <td>Aprobado</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>
