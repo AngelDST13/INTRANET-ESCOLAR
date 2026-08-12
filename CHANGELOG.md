@@ -10,3 +10,11 @@
 - Módulo de baja (eliminación) y edición de usuarios en el panel administrativo.
 - Registro y consulta de control de asistencia para docentes y familias.
 - Mejoras de accesibilidad con etiquetas ARIA y estados de enfoque por teclado.
+
+## [0.3.0] - 2026-08-12
+
+### Añadido
+- Restricción de seguridad: el registro público solo permite perfiles de Estudiantes/Familias; el personal docente es gestionado únicamente por Administración/Dirección[cite: 1].
+- Menú lateral de navegación protegido por roles con ocultamiento de secciones[cite: 1].
+- Módulo "Mi Perfil" con actualización de foto de avatar, datos personales y biografía.
+- Rediseño de interfaz completa con estilo Glassmorphism y la paleta oficial de colores de la institución.
