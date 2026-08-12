@@ -18,3 +18,14 @@
 - Menú lateral de navegación protegido por roles con ocultamiento de secciones[cite: 1].
 - Módulo "Mi Perfil" con actualización de foto de avatar, datos personales y biografía.
 - Rediseño de interfaz completa con estilo Glassmorphism y la paleta oficial de colores de la institución.
+
+## [Unreleased] - 2026-08-12
+
+### Añadido
+- Formulario de registro de estudiantes y encargados con expediente completo (Grado, Sección, Edad, Cumpleaños, Dirección, Encargado, Correo).
+- Identidad visual e institucional actualizada a **Colegio Eton**.
+- Privacidad estricta para estudiantes: filtrado de calificaciones y asistencia para que solo vean sus propios datos.
+
+### Corregido
+- Validaciones nativas en campos numéricos (Teléfono, Edad, Notas) para impedir la entrada de letras.
+- Resolución de parpadeo y bucle de redirección en el flujo de inicio/cierre de sesión.

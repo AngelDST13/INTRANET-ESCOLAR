@@ -3,252 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Intranet Escolar — Panel Control</title>
+  <title>Intranet Escolar — Iniciar Sesión</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="dashboard-body">
+<body class="login-body">
 
-  <!-- Encabezado Estilo Glass + Paleta Oficial -->
-  <header class="navbar-glass">
-    <div class="navbar-brand">
-      <div class="brand-logo">IE</div>
+  <div class="login-card glass-card">
+    <div class="login-header">
+      <div class="brand-logo brand-logo--inline">IE</div>
       <h2>Intranet Escolar</h2>
+      <p class="subtitle">Ingresa tus credenciales para acceder</p>
     </div>
-    <div class="user-profile-summary">
-      <img id="navAvatar" src="https://via.placeholder.com/40" alt="Foto de perfil" class="avatar-small">
-      <div class="user-text">
-        <span id="welcomeUser" class="user-name">Cargando...</span>
-        <span id="userBadge" class="badge-role">ROL</span>
+
+    <form id="loginForm" class="login-form">
+      <div class="form-group">
+        <label for="username">Usuario</label>
+        <input type="text" id="username" placeholder="Ej. Joshi, admin, prof_mario" required autocomplete="username">
       </div>
-      <button id="logoutBtn" class="btn-logout" aria-label="Cerrar sesión">Cerrar Sesión</button>
-    </div>
-  </header>
 
-  <div class="dashboard-layout">
-    <!-- Menú Lateral de Navegación Protegido -->
-    <nav class="sidebar-glass" role="navigation">
-      <ul class="nav-menu">
-        <li>
-          <button class="nav-link active" onclick="showTab('announcementsTab')">
-            <span>📢</span> Tablón Oficial
-          </button>
-        </li>
-        <!-- Solo visible para Administración / Dirección -->
-        <li id="menuAdminTeachers" style="display: none;">
-          <button class="nav-link" onclick="showTab('adminTeachersTab')">
-            <span>👨‍🏫</span> Gestión de Docentes
-          </button>
-        </li>
-        <!-- Solo visible para Administración -->
-        <li id="menuAdminUsers" style="display: none;">
-          <button class="nav-link" onclick="showTab('adminUsersTab')">
-            <span>👥</span> Control de Usuarios
-          </button>
-        </li>
-        <!-- Solo visible para Docentes y Admin -->
-        <li id="menuAcademic" style="display: none;">
-          <button class="nav-link" onclick="showTab('academicTab')">
-            <span>📝</span> Módulo Académico
-          </button>
-        </li>
-        <!-- Visible para Estudiantes / Familias -->
-        <li id="menuStudent" style="display: none;">
-          <button class="nav-link" onclick="showTab('studentTab')">
-            <span>📊</span> Mis Calificaciones
-          </button>
-        </li>
-        <li>
-          <button class="nav-link" onclick="showTab('profileTab')">
-            <span>⚙️</span> Mi Perfil
-          </button>
-        </li>
-      </ul>
-    </nav>
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
+      </div>
 
-    <!-- Área de Contenido Dinámico -->
-    <main class="content-area">
-      
-      <!-- Pestaña 1: Tablón de Comunicados -->
-      <section id="announcementsTab" class="tab-content active">
-        <div class="glass-card">
-          <h3>Tablón de Comunicados e Avisos</h3>
-          <ul id="announcementsList" class="data-list"></ul>
+      <div class="form-group">
+        <label for="role">Tipo de Usuario</label>
+        <select id="role" required>
+          <option value="admin">Administrador / Dirección</option>
+          <option value="docente" selected>Docente / Profesor</option>
+          <option value="estudiante">Estudiante / Padre de Familia</option>
+        </select>
+      </div>
 
-          <form id="addNoticeForm" style="display: none; margin-top: 1.5rem;">
-            <div class="form-group">
-              <input type="text" id="noticeInput" placeholder="Escribe un comunicado o aviso oficial..." required>
-            </div>
-            <button type="submit" class="btn-action">+ Publicar Aviso</button>
-          </form>
-        </div>
-      </section>
-
-      <!-- Pestaña 2: Gestión de Docentes (Exclusivo Administrador/Director) -->
-      <section id="adminTeachersTab" class="tab-content" style="display: none;">
-        <div class="glass-card">
-          <h3>Gestión Exclusiva de Cuerpo Docente</h3>
-          <p class="subtitle">Solo la Dirección y Administración pueden registrar o gestionar profesores.</p>
-          
-          <form id="addTeacherForm" class="grid-form">
-            <div class="form-group">
-              <label for="teacherName">Nombre Completo del Profesor</label>
-              <input type="text" id="teacherName" placeholder="Ej. Prof. Roberto Gómez" required>
-            </div>
-            <div class="form-group">
-              <label for="teacherUser">Usuario de Acceso</label>
-              <input type="text" id="teacherUser" placeholder="Ej. roberto_gomez" required>
-            </div>
-            <div class="form-group">
-              <label for="teacherSubject">Asignatura Principal</label>
-              <input type="text" id="teacherSubject" placeholder="Ej. Ciencias Naturales" required>
-            </div>
-            <button type="submit" class="btn-action">+ Registrar Docente</button>
-          </form>
-
-          <h4 style="margin-top: 1.5rem;">Docentes Registrados</h4>
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Docente</th>
-                <th>Usuario</th>
-                <th>Asignatura</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody id="teachersTableBody"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- Pestaña 3: Control General de Usuarios (Admin) -->
-      <section id="adminUsersTab" class="tab-content" style="display: none;">
-        <div class="glass-card">
-          <h3>Administración General de Usuarios</h3>
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Usuario</th>
-                <th>Rol</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody id="usersTableBody"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- Pestaña 4: Módulo Académico (Docentes/Admin) -->
-      <section id="academicTab" class="tab-content" style="display: none;">
-        <div class="glass-card">
-          <h3>Módulo Académico — Calificaciones y Asistencia</h3>
-          
-          <div class="grid-2col">
-            <form id="addGradeForm">
-              <h4>Registrar Calificación</h4>
-              <div class="form-group">
-                <label for="studentName">Estudiante</label>
-                <input type="text" id="studentName" placeholder="Nombre estudiante" required>
-              </div>
-              <div class="form-group">
-                <label for="subjectName">Asignatura</label>
-                <input type="text" id="subjectName" placeholder="Materia" required>
-              </div>
-              <div class="form-group">
-                <label for="gradeScore">Calificación (0 - 100)</label>
-                <input type="number" id="gradeScore" min="0" max="100" required>
-              </div>
-              <button type="submit" class="btn-action">Guardar Nota</button>
-            </form>
-
-            <form id="attendanceForm">
-              <h4>Control de Asistencia</h4>
-              <div class="form-group">
-                <label for="attendanceStudent">Estudiante</label>
-                <input type="text" id="attendanceStudent" placeholder="Nombre estudiante" required>
-              </div>
-              <div class="form-group">
-                <label for="attendanceStatus">Estado</label>
-                <select id="attendanceStatus" required>
-                  <option value="Presente">Presente</option>
-                  <option value="Ausente">Ausente</option>
-                  <option value="Justificado">Justificado</option>
-                </select>
-              </div>
-              <button type="submit" class="btn-action">Guardar Asistencia</button>
-            </form>
-          </div>
-        </div>
-      </section>
-
-      <!-- Pestaña 5: Consulta Estudiante / Familia -->
-      <section id="studentTab" class="tab-content" style="display: none;">
-        <div class="glass-card">
-          <h3>Boleta de Calificaciones y Asistencia</h3>
-          <h4>Notas</h4>
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Estudiante</th>
-                <th>Asignatura</th>
-                <th>Nota</th>
-                <th>Estado</th>
-              </tr>
-            </thead>
-            <tbody id="gradesTableBody"></tbody>
-          </table>
-
-          <h4 style="margin-top: 1.5rem;">Asistencia</h4>
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Estudiante</th>
-                <th>Condición</th>
-              </tr>
-            </thead>
-            <tbody id="attendanceTableBody"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- Pestaña 6: Mi Perfil (Personalización) -->
-      <section id="profileTab" class="tab-content" style="display: none;">
-        <div class="glass-card">
-          <h3>Personalización del Perfil</h3>
-          <form id="profileForm" class="profile-container">
-            <div class="avatar-upload-section">
-              <img id="profilePreview" src="https://via.placeholder.com/120" alt="Vista previa avatar" class="avatar-large">
-              <div class="form-group">
-                <label for="photoUrl">URL de la Foto de Perfil</label>
-                <input type="url" id="photoUrl" placeholder="https://ejemplo.com/mi-foto.jpg">
-              </div>
-            </div>
-
-            <div class="profile-details">
-              <div class="form-group">
-                <label for="profileFullName">Nombre Completo</label>
-                <input type="text" id="profileFullName" placeholder="Tu nombre real">
-              </div>
-              <div class="form-group">
-                <label for="profileEmail">Correo Electrónico</label>
-                <input type="email" id="profileEmail" placeholder="correo@institucion.edu">
-              </div>
-              <div class="form-group">
-                <label for="profilePhone">Teléfono de Contacto</label>
-                <input type="tel" id="profilePhone" placeholder="+506 8888-8888">
-              </div>
-              <div class="form-group">
-                <label for="profileBio">Información / Biografía</label>
-                <textarea id="profileBio" rows="3" placeholder="Información sobre tu cargo o grupo familiar..."></textarea>
-              </div>
-              <button type="submit" class="btn-action">Actualizar Mi Perfil</button>
-            </div>
-          </form>
-        </div>
-      </section>
-
-    </main>
+      <button type="submit" class="btn-action btn-full btn-margin-top">Iniciar Sesión</button>
+    </form>
   </div>
 
-  <script src="dashboard.js"></script>
+  <script src="auth.js"></script>
 </body>
 </html>
