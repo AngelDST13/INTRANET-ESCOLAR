@@ -30,3 +30,8 @@ Intranet escolar de uso interno para una institución educativa pública. El sis
 ## 7. Buenas Prácticas
 - Documentar el "por qué" detrás de las decisiones técnicas en lugar de solo describir el código.
 - Mantener un historial de Git ordenado utilizando commits descriptivos con la convención Conventional Commits (`feat:`, `docs:`, `fix:`, `chore:`).
+
+## 8. Memoria del Proyecto
+- 2026-08: Definición e inicialización del proyecto con Git y Markdown.
+- 2026-08: Implementación de autenticación por roles (Admin, Docente, Estudiante).
+- 2026-08: Adición de gestión completa de usuarios (alta, baja, edición) y módulo de asistencia académica.
