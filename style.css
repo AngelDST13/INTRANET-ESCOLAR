@@ -227,3 +227,19 @@ body.login-page {
   font-size: 0.9rem;
   text-align: center;
 }
+/* Accesibilidad y Foco Teclado */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+button:focus, input:focus, select:focus {
+  outline: 3px solid #3182ce;
+  outline-offset: 2px;
+}

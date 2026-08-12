@@ -9,33 +9,34 @@
 <body>
 
   <div class="dashboard-container">
-    <header class="navbar">
+    <header class="navbar" role="banner">
       <h2>Intranet Escolar</h2>
       <div class="user-info">
         <span id="welcomeUser">Cargando...</span>
-        <button id="logoutBtn" class="btn-logout">Cerrar Sesión</button>
+        <button id="logoutBtn" class="btn-logout" aria-label="Cerrar sesión del sistema">Cerrar Sesión</button>
       </div>
     </header>
 
-    <main class="content">
+    <main class="content" role="main">
       <!-- Módulo de Comunicados General -->
-      <section class="card">
-        <h3>Tablón de Comunicados e Avisos</h3>
+      <section class="card" aria-labelledby="announcements-title">
+        <h3 id="announcements-title">Tablón de Comunicados e Avisos</h3>
         <ul id="announcementsList" class="data-list"></ul>
 
-        <!-- Formulario para publicar aviso (Solo Admin y Docentes) -->
         <form id="addNoticeForm" style="display: none; margin-top: 1rem;">
           <div class="form-group">
+            <label for="noticeInput" class="sr-only">Nuevo Aviso</label>
             <input type="text" id="noticeInput" placeholder="Escribe un comunicado o aviso oficial..." required>
           </div>
           <button type="submit" class="btn-action">+ Publicar Aviso</button>
         </form>
       </section>
 
-      <!-- Módulo de Administración: Gestión de Usuarios -->
-      <section id="adminSection" class="card role-section" style="display: none;">
-        <h3>Gestión de Usuarios (Administración)</h3>
-        <form id="addUserForm" style="margin-bottom: 1rem;">
+      <!-- Módulo de Administración: Gestión Completa de Usuarios (Alta, Baja, Edición) -->
+      <section id="adminSection" class="card role-section" style="display: none;" aria-labelledby="admin-title">
+        <h3 id="admin-title">Gestión de Usuarios (Administración)</h3>
+        <form id="addUserForm" style="margin-bottom: 1.5rem;">
+          <input type="hidden" id="editIndex" value="-1">
           <div class="form-group">
             <label for="newUsername">Nombre de Usuario</label>
             <input type="text" id="newUsername" placeholder="Ej. juan_perez" required>
@@ -47,19 +48,30 @@
               <option value="estudiante">Estudiante / Familia</option>
             </select>
           </div>
-          <button type="submit" class="btn-action">+ Registrar Usuario</button>
+          <button type="submit" id="btnUserForm" class="btn-action">+ Registrar Usuario</button>
         </form>
 
         <h4>Usuarios Registrados</h4>
-        <ul id="usersList" class="data-list" style="margin-top: 0.5rem;"></ul>
+        <table class="data-table" style="margin-top: 0.5rem;">
+          <thead>
+            <tr>
+              <th>Usuario</th>
+              <th>Rol</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody"></tbody>
+        </table>
       </section>
 
-      <!-- Módulo Docente: Registro de Calificaciones -->
-      <section id="teacherSection" class="card role-section" style="display: none;">
-        <h3>Módulo Académico — Registro de Calificaciones</h3>
-        <form id="addGradeForm">
+      <!-- Módulo Docente: Calificaciones y Control de Asistencia -->
+      <section id="teacherSection" class="card role-section" style="display: none;" aria-labelledby="teacher-title">
+        <h3 id="teacher-title">Módulo Académico — Docentes</h3>
+        
+        <h4>1. Registro de Calificaciones</h4>
+        <form id="addGradeForm" style="margin-bottom: 1.5rem;">
           <div class="form-group">
-            <label for="studentName">Nombre del Estudiante</label>
+            <label for="studentName">Estudiante</label>
             <input type="text" id="studentName" placeholder="Ej. Ana Gómez" required>
           </div>
           <div class="form-group">
@@ -72,12 +84,31 @@
           </div>
           <button type="submit" class="btn-action">Guardar Calificación</button>
         </form>
+
+        <h4>2. Control de Asistencia Diaria</h4>
+        <form id="attendanceForm">
+          <div class="form-group">
+            <label for="attendanceStudent">Estudiante</label>
+            <input type="text" id="attendanceStudent" placeholder="Ej. Carlos López" required>
+          </div>
+          <div class="form-group">
+            <label for="attendanceStatus">Estado de Asistencia</label>
+            <select id="attendanceStatus" required>
+              <option value="Presente">Presente</option>
+              <option value="Ausente">Ausente</option>
+              <option value="Jutificado">Justificado</option>
+            </select>
+          </div>
+          <button type="submit" class="btn-action">Registrar Asistencia</button>
+        </form>
       </section>
 
-      <!-- Módulo Estudiante / Familia: Consulta de Notas -->
-      <section id="studentSection" class="card role-section" style="display: none;">
-        <h3>Boleta de Calificaciones (Estudiantes / Familias)</h3>
-        <table class="data-table">
+      <!-- Módulo Estudiante / Familia: Consulta de Calificaciones y Asistencia -->
+      <section id="studentSection" class="card role-section" style="display: none;" aria-labelledby="student-title">
+        <h3 id="student-title">Boleta y Asistencia (Estudiantes / Familias)</h3>
+        
+        <h4>Calificaciones</h4>
+        <table class="data-table" style="margin-bottom: 1.5rem;">
           <thead>
             <tr>
               <th>Estudiante</th>
@@ -86,9 +117,18 @@
               <th>Estado</th>
             </tr>
           </thead>
-          <tbody id="gradesTableBody">
-            <!-- Se cargan dinámicamente -->
-          </tbody>
+          <tbody id="gradesTableBody"></tbody>
+        </table>
+
+        <h4>Registro de Asistencia</h4>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Estudiante</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody id="attendanceTableBody"></tbody>
         </table>
       </section>
     </main>
