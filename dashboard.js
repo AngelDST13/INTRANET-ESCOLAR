@@ -7,18 +7,58 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   const userSession = JSON.parse(sessionData);
-  document.getElementById('welcomeUser').textContent = `${userSession.username} (${userSession.role.toUpperCase()})`;
+  
+  // Cargar datos del usuario en la barra superior
+  document.getElementById('welcomeUser').textContent = userSession.username;
+  document.getElementById('userBadge').textContent = userSession.role;
 
   initDatabase();
-  setupRoleView(userSession.role);
+  applyRoleSecurity(userSession.role);
+  loadUserProfile(userSession.username);
   renderAllData();
-  setupFormEvents();
+  setupFormEvents(userSession);
 
   document.getElementById('logoutBtn').addEventListener('click', function() {
     localStorage.removeItem('userSession');
     window.location.href = 'index.html';
   });
 });
+
+// Control Estricto de Menú por Roles
+function applyRoleSecurity(role) {
+  // Ocultar todas las secciones dinámicas al inicio
+  document.getElementById('menuAdminTeachers').style.display = 'none';
+  document.getElementById('menuAdminUsers').style.display = 'none';
+  document.getElementById('menuAcademic').style.display = 'none';
+  document.getElementById('menuStudent').style.display = 'none';
+
+  if (role === 'admin') {
+    // Administrador/Director: Acceso total a Docentes y Usuarios
+    document.getElementById('menuAdminTeachers').style.display = 'block';
+    document.getElementById('menuAdminUsers').style.display = 'block';
+    document.getElementById('menuAcademic').style.display = 'block';
+    document.getElementById('addNoticeForm').style.display = 'block';
+  } else if (role === 'docente') {
+    // Docente: Acceso solo a Módulo Académico y Comunicados
+    document.getElementById('menuAcademic').style.display = 'block';
+    document.getElementById('addNoticeForm').style.display = 'block';
+  } else if (role === 'estudiante') {
+    // Estudiante / Familia: Acceso solo a Notas y Perfil
+    document.getElementById('menuStudent').style.display = 'block';
+  }
+}
+
+// Navegación entre pestañas
+window.showTab = function(tabId) {
+  const tabs = document.querySelectorAll('.tab-content');
+  tabs.forEach(tab => tab.style.display = 'none');
+
+  const links = document.querySelectorAll('.nav-link');
+  links.forEach(link => link.classList.remove('active'));
+
+  document.getElementById(tabId).style.display = 'block';
+  event.currentTarget.classList.add('active');
+};
 
 function initDatabase() {
   if (!localStorage.getItem('announcements')) {
@@ -27,55 +67,42 @@ function initDatabase() {
       'Reunión general de padres de familia el próximo viernes.'
     ]));
   }
+  if (!localStorage.getItem('teachersList')) {
+    localStorage.setItem('teachersList', JSON.stringify([
+      { name: 'Roberto Gómez', username: 'profesor_mario', subject: 'Matemáticas' }
+    ]));
+  }
   if (!localStorage.getItem('grades')) {
     localStorage.setItem('grades', JSON.stringify([
-      { student: 'Ana Gómez', subject: 'Matemáticas', score: 95 },
-      { student: 'Carlos López', subject: 'Español', score: 88 }
+      { student: 'Ana Gómez', subject: 'Matemáticas', score: 95 }
     ]));
   }
   if (!localStorage.getItem('attendance')) {
     localStorage.setItem('attendance', JSON.stringify([
-      { student: 'Ana Gómez', status: 'Presente' },
-      { student: 'Carlos López', status: 'Ausente' }
+      { student: 'Ana Gómez', status: 'Presente' }
     ]));
-  }
-  if (!localStorage.getItem('usersList')) {
-    localStorage.setItem('usersList', JSON.stringify([
-      { username: 'profesor_mario', role: 'docente' },
-      { username: 'familia_gomez', role: 'estudiante' }
-    ]));
-  }
-}
-
-function setupRoleView(role) {
-  if (role === 'admin') {
-    document.getElementById('adminSection').style.display = 'block';
-    document.getElementById('addNoticeForm').style.display = 'block';
-  } else if (role === 'docente') {
-    document.getElementById('teacherSection').style.display = 'block';
-    document.getElementById('addNoticeForm').style.display = 'block';
-  } else if (role === 'estudiante') {
-    document.getElementById('studentSection').style.display = 'block';
   }
 }
 
 function renderAllData() {
-  renderAnnouncements();
-  renderGrades();
-  renderUsers();
-  renderAttendance();
-}
-
-function renderAnnouncements() {
-  const list = document.getElementById('announcementsList');
+  // Renderizar comunicados
   const notices = JSON.parse(localStorage.getItem('announcements')) || [];
-  list.innerHTML = notices.map(notice => `<li>${notice}</li>`).join('');
-}
+  document.getElementById('announcementsList').innerHTML = notices.map(n => `<li>${n}</li>`).join('');
 
-function renderGrades() {
-  const tbody = document.getElementById('gradesTableBody');
+  // Renderizar docentes (Admin)
+  const teachers = JSON.parse(localStorage.getItem('teachersList')) || [];
+  document.getElementById('teachersTableBody').innerHTML = teachers.map((t, i) => `
+    <tr>
+      <td>${t.name}</td>
+      <td>${t.username}</td>
+      <td>${t.subject}</td>
+      <td><button onclick="deleteTeacher(${i})" class="btn-logout" style="padding:0.2rem 0.5rem;">Baja</button></td>
+    </tr>
+  `).join('');
+
+  // Renderizar notas
   const grades = JSON.parse(localStorage.getItem('grades')) || [];
-  tbody.innerHTML = grades.map(g => `
+  document.getElementById('gradesTableBody').innerHTML = grades.map(g => `
     <tr>
       <td>${g.student}</td>
       <td>${g.subject}</td>
@@ -83,12 +110,10 @@ function renderGrades() {
       <td><strong>${g.score >= 70 ? 'Aprobado' : 'Reprobado'}</strong></td>
     </tr>
   `).join('');
-}
 
-function renderAttendance() {
-  const tbody = document.getElementById('attendanceTableBody');
+  // Renderizar asistencia
   const attendance = JSON.parse(localStorage.getItem('attendance')) || [];
-  tbody.innerHTML = attendance.map(a => `
+  document.getElementById('attendanceTableBody').innerHTML = attendance.map(a => `
     <tr>
       <td>${a.student}</td>
       <td><strong>${a.status}</strong></td>
@@ -96,103 +121,65 @@ function renderAttendance() {
   `).join('');
 }
 
-function renderUsers() {
-  const tbody = document.getElementById('usersTableBody');
-  const users = JSON.parse(localStorage.getItem('usersList')) || [];
-  tbody.innerHTML = users.map((u, index) => `
-    <tr>
-      <td>${u.username}</td>
-      <td>${u.role}</td>
-      <td>
-        <button onclick="editUser(${index})" class="btn-action" style="margin:0; padding:0.25rem 0.5rem; background:#2b6cb0;">Editar</button>
-        <button onclick="deleteUser(${index})" class="btn-logout" style="margin:0; padding:0.25rem 0.5rem;">Baja</button>
-      </td>
-    </tr>
-  `).join('');
+// Perfil de Usuario y Foto
+function loadUserProfile(username) {
+  const profileKey = `profile_${username}`;
+  const profileData = JSON.parse(localStorage.getItem(profileKey)) || {
+    fullName: username,
+    email: '',
+    phone: '',
+    bio: '',
+    photoUrl: 'https://via.placeholder.com/120'
+  };
+
+  document.getElementById('profileFullName').value = profileData.fullName;
+  document.getElementById('profileEmail').value = profileData.email;
+  document.getElementById('profilePhone').value = profileData.phone;
+  document.getElementById('profileBio').value = profileData.bio;
+  document.getElementById('photoUrl').value = profileData.photoUrl;
+  document.getElementById('profilePreview').src = profileData.photoUrl;
+  document.getElementById('navAvatar').src = profileData.photoUrl;
 }
 
-// Funciones globales para Editar y Eliminar (Baja) usuarios
-window.deleteUser = function(index) {
-  const users = JSON.parse(localStorage.getItem('usersList')) || [];
-  if (confirm(`¿Dar de baja al usuario "${users[index].username}"?`)) {
-    users.splice(index, 1);
-    localStorage.setItem('usersList', JSON.stringify(users));
-    renderUsers();
-  }
-};
-
-window.editUser = function(index) {
-  const users = JSON.parse(localStorage.getItem('usersList')) || [];
-  const user = users[index];
-  document.getElementById('newUsername').value = user.username;
-  document.getElementById('newUserRole').value = user.role;
-  document.getElementById('editIndex').value = index;
-  document.getElementById('btnUserForm').textContent = 'Guardar Cambios';
-};
-
-function setupFormEvents() {
-  // Publicar Aviso
-  document.getElementById('addNoticeForm')?.addEventListener('submit', function(e) {
+function setupFormEvents(userSession) {
+  // Guardar Perfil
+  document.getElementById('profileForm')?.addEventListener('submit', function(e) {
     e.preventDefault();
-    const text = document.getElementById('noticeInput').value;
-    const notices = JSON.parse(localStorage.getItem('announcements'));
-    notices.push(text);
-    localStorage.setItem('announcements', JSON.stringify(notices));
-    document.getElementById('noticeInput').value = '';
-    renderAnnouncements();
+    const profileData = {
+      fullName: document.getElementById('profileFullName').value,
+      email: document.getElementById('profileEmail').value,
+      phone: document.getElementById('profilePhone').value,
+      bio: document.getElementById('profileBio').value,
+      photoUrl: document.getElementById('photoUrl').value || 'https://via.placeholder.com/120'
+    };
+
+    localStorage.setItem(`profile_${userSession.username}`, JSON.stringify(profileData));
+    document.getElementById('navAvatar').src = profileData.photoUrl;
+    document.getElementById('profilePreview').src = profileData.photoUrl;
+    alert('Perfil actualizado con éxito.');
   });
 
-  // Guardar / Editar Usuario (Admin)
-  document.getElementById('addUserForm')?.addEventListener('submit', function(e) {
+  // Registrar Docente (Exclusivo Admin)
+  document.getElementById('addTeacherForm')?.addEventListener('submit', function(e) {
     e.preventDefault();
-    const username = document.getElementById('newUsername').value;
-    const role = document.getElementById('newUserRole').value;
-    const editIndex = parseInt(document.getElementById('editIndex').value);
-    const users = JSON.parse(localStorage.getItem('usersList')) || [];
+    const name = document.getElementById('teacherName').value;
+    const username = document.getElementById('teacherUser').value;
+    const subject = document.getElementById('teacherSubject').value;
 
-    if (editIndex >= 0) {
-      users[editIndex] = { username, role };
-      document.getElementById('editIndex').value = "-1";
-      document.getElementById('btnUserForm').textContent = "+ Registrar Usuario";
-    } else {
-      users.push({ username, role });
-    }
+    const teachers = JSON.parse(localStorage.getItem('teachersList')) || [];
+    teachers.push({ name, username, subject });
+    localStorage.setItem('teachersList', JSON.stringify(teachers));
 
-    localStorage.setItem('usersList', JSON.stringify(users));
-    document.getElementById('newUsername').value = '';
-    renderUsers();
-  });
-
-  // Guardar Calificación
-  document.getElementById('addGradeForm')?.addEventListener('submit', function(e) {
-    e.preventDefault();
-    const student = document.getElementById('studentName').value;
-    const subject = document.getElementById('subjectName').value;
-    const score = Number(document.getElementById('gradeScore').value);
-    
-    const grades = JSON.parse(localStorage.getItem('grades'));
-    grades.push({ student, subject, score });
-    localStorage.setItem('grades', JSON.stringify(grades));
-    
-    document.getElementById('studentName').value = '';
-    document.getElementById('subjectName').value = '';
-    document.getElementById('gradeScore').value = '';
-    alert('Calificación guardada.');
-    renderGrades();
-  });
-
-  // Guardar Asistencia
-  document.getElementById('attendanceForm')?.addEventListener('submit', function(e) {
-    e.preventDefault();
-    const student = document.getElementById('attendanceStudent').value;
-    const status = document.getElementById('attendanceStatus').value;
-
-    const attendance = JSON.parse(localStorage.getItem('attendance')) || [];
-    attendance.push({ student, status });
-    localStorage.setItem('attendance', JSON.stringify(attendance));
-
-    document.getElementById('attendanceStudent').value = '';
-    alert('Asistencia registrada.');
-    renderAttendance();
+    document.getElementById('teacherName').value = '';
+    document.getElementById('teacherUser').value = '';
+    document.getElementById('teacherSubject').value = '';
+    renderAllData();
   });
 }
+
+window.deleteTeacher = function(index) {
+  const teachers = JSON.parse(localStorage.getItem('teachersList')) || [];
+  teachers.splice(index, 1);
+  localStorage.setItem('teachersList', JSON.stringify(teachers));
+  renderAllData();
+};

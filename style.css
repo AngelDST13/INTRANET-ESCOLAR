@@ -1,245 +1,303 @@
 /* ==========================================================================
-   INTRANET ESCOLAR — ESTILOS GENERALES Y MODULARES
+   PALETA DE COLORES Y ESTILO GLASSMORPHISM
    ========================================================================== */
-
-/* --------------------------------------------------------------------------
-   1. VARIABLES GLOBALES (Design Tokens)
-   -------------------------------------------------------------------------- */
 :root {
-  /* Paleta de Colores Primarios */
-  --color-primary: #1a365d;
-  --color-primary-hover: #2c5282;
-  --color-accent: #2b6cb0;
-  --color-action: #319795;
-  --color-action-hover: #2c7a7b;
-  --color-danger: #e53e3e;
-  --color-danger-hover: #c53030;
-
-  /* Colores de Fondo y Neutrales */
-  --bg-main: #f4f6f9;
-  --bg-card: #ffffff;
-  --bg-table-header: #edf2f7;
-  
-  /* Textos y Bordes */
-  --text-dark: #2d3748;
-  --text-muted: #4a5568;
-  --border-color: #cbd5e0;
-  --border-light: #e2e8f0;
-
-  /* Tipografía y Sombras */
-  --font-main: Arial, Helvetica, sans-serif;
-  --shadow-card: 0 4px 10px rgba(0, 0, 0, 0.1);
-  --shadow-soft: 0 2px 5px rgba(0, 0, 0, 0.05);
-  --radius-sm: 4px;
-  --radius-md: 8px;
+  --primary-navy: #1b365d;       /* Azul marino encabezados */
+  --accent-teal: #2a9d8f;        /* Verde azulado botones principales */
+  --accent-teal-hover: #218378;
+  --danger-red: #dc2626;         /* Rojo botones cerrar sesión/eliminar */
+  --danger-red-hover: #b91c1c;
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.4);
+  --glass-shadow: 0 8px 32px 0 rgba(27, 54, 93, 0.12);
+  --text-main: #1f2937;
+  --text-muted: #6b7280;
 }
 
-/* --------------------------------------------------------------------------
-   2. REINICIO Y ESTILOS BASE (Reset & Base Styles)
-   -------------------------------------------------------------------------- */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: var(--font-main);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
 body {
-  background-color: var(--bg-main);
-  color: var(--text-dark);
+  background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+  color: var(--text-main);
   min-height: 100vh;
 }
 
-/* --------------------------------------------------------------------------
-   3. COMPONENTE: ACCESO / LOGIN (index.html)
-   -------------------------------------------------------------------------- */
-body.login-page {
+/* Auth Page */
+.auth-body {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.login-card {
-  background: var(--bg-card);
   padding: 2rem;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-card);
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: var(--glass-shadow);
+}
+
+.auth-card {
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
 }
 
-.login-card h1 {
-  font-size: 1.5rem;
-  color: var(--color-primary);
-  margin-bottom: 1.5rem;
+.auth-header {
   text-align: center;
+  margin-bottom: 1.5rem;
 }
 
+.auth-header h2 {
+  color: var(--primary-navy);
+  font-size: 1.8rem;
+}
+
+.auth-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 0.75rem;
+  background: none;
+  border: none;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+}
+
+.tab-btn.active {
+  color: var(--primary-navy);
+  border-bottom-color: var(--primary-navy);
+}
+
+/* Header Navbar Glass */
+.navbar-glass {
+  background: var(--primary-navy);
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-logo {
+  background: var(--accent-teal);
+  color: white;
+  font-weight: bold;
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+}
+
+.user-profile-summary {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.avatar-small {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--accent-teal);
+}
+
+.user-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.badge-role {
+  font-size: 0.75rem;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.1rem 0.5rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+/* Botones con estilo exacto */
+.btn-primary, .btn-action {
+  background-color: var(--accent-teal);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  width: 100%;
+}
+
+.btn-primary:hover, .btn-action:hover {
+  background-color: var(--accent-teal-hover);
+}
+
+.btn-logout {
+  background-color: var(--danger-red);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-logout:hover {
+  background-color: var(--danger-red-hover);
+}
+
+/* Layout del Dashboard */
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.sidebar-glass {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid var(--glass-border);
+  height: fit-content;
+}
+
+.nav-menu {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.nav-link {
+  width: 100%;
+  text-align: left;
+  padding: 0.85rem 1rem;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-main);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: all 0.2s;
+}
+
+.nav-link:hover, .nav-link.active {
+  background: var(--primary-navy);
+  color: white;
+}
+
+/* Formularios y Tablas */
 .form-group {
   margin-bottom: 1rem;
 }
 
 .form-group label {
   display: block;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  color: var(--text-dark);
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  font-size: 0.9rem;
 }
 
-.form-group input,
-.form-group select {
+input, select, textarea {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  font-size: 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
 }
 
-/* --------------------------------------------------------------------------
-   4. COMPONENTE: PANEL PRINCIPAL / DASHBOARD (dashboard.html)
-   -------------------------------------------------------------------------- */
-.dashboard-container {
-  width: 100%;
-  max-width: 900px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+input:focus, select:focus, textarea:focus {
+  outline: 3px solid var(--accent-teal);
+  border-color: transparent;
 }
 
-/* Barra de Navegación */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: var(--color-primary);
-  color: white;
-  padding: 1rem;
-  border-radius: var(--radius-sm);
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-/* Contenido y Tarjetas */
-.content {
-  margin-top: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.card {
-  background: var(--bg-card);
-  padding: 1.5rem;
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-soft);
-}
-
-.card h3 {
-  margin-bottom: 1rem;
-  color: var(--text-dark);
-}
-
-.data-list {
-  list-style-position: inside;
+.help-text {
+  font-size: 0.8rem;
   color: var(--text-muted);
-  line-height: 1.6;
+  margin-top: 0.25rem;
+  display: block;
 }
 
-/* Tablas de Datos */
 .data-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 1rem;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.data-table th,
-.data-table td {
-  border: 1px solid var(--border-light);
-  padding: 0.75rem;
+.data-table th, .data-table td {
+  padding: 0.85rem 1rem;
   text-align: left;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .data-table th {
-  background: var(--bg-table-header);
-  font-weight: bold;
-}
-
-/* --------------------------------------------------------------------------
-   5. BOTONES Y ELEMENTOS DE ACCIÓN
-   -------------------------------------------------------------------------- */
-.btn-submit {
-  width: 100%;
-  padding: 0.75rem;
-  background-color: var(--color-accent);
+  background: var(--primary-navy);
   color: white;
-  border: none;
-  border-radius: var(--radius-sm);
-  font-size: 1rem;
-  cursor: pointer;
-  font-weight: bold;
+  font-weight: 600;
 }
 
-.btn-submit:hover {
-  background-color: var(--color-primary-hover);
+.grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
 }
 
-.btn-action {
+/* Perfil */
+.profile-container {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 2rem;
   margin-top: 1rem;
-  background: var(--color-action);
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-weight: bold;
 }
 
-.btn-action:hover {
-  background-color: var(--color-action-hover);
+.avatar-upload-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }
 
-.btn-logout {
-  background: var(--color-danger);
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-}
-
-.btn-logout:hover {
-  background-color: var(--color-danger-hover);
-}
-
-/* --------------------------------------------------------------------------
-   6. MENSAJES Y COMPONENTES DE ESTADO
-   -------------------------------------------------------------------------- */
-.alert-box {
-  display: none;
-  margin-top: 1rem;
-  padding: 0.75rem;
-  background-color: #fed7d7;
-  color: #9b2c2c;
-  border-radius: var(--radius-sm);
-  font-size: 0.9rem;
-  text-align: center;
-}
-/* Accesibilidad y Foco Teclado */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  border: 0;
-}
-
-button:focus, input:focus, select:focus {
-  outline: 3px solid #3182ce;
-  outline-offset: 2px;
+.avatar-large {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--accent-teal);
 }
