@@ -1,38 +1,46 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Colegio Eton — Panel Principal</title>
-  <!-- Iconos FontAwesome v6 -->
+  <title>Colegio Eton — Intranet Escolar</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="dashboard-body">
 
-  <!-- Navbar Superior Mica -->
+  <!-- Container de Toasts Flotantes -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Navbar Glass Header -->
   <header class="navbar-glass">
     <div class="navbar-brand">
       <div class="brand-logo">ETON</div>
       <span class="brand-title">Colegio Eton</span>
     </div>
 
-    <div class="user-profile-summary">
-      <img id="userAvatar" src="https://ui-avatars.com/api/?name=Usuario&background=2a9d8f&color=fff" alt="Foto de Perfil del Usuario" class="avatar-small">
-      <div class="user-text">
-        <span id="userName" class="user-name">Cargando...</span>
-        <span id="userRoleBadge" class="badge-role">ROL</span>
-      </div>
-      <button id="btnLogout" class="btn-logout">
-        <i class="fa-solid fa-power-off"></i> Cerrar Sesión
+    <div class="navbar-right">
+      <button id="btnThemeToggle" class="theme-toggle-btn" title="Cambiar Tema (Oscuro/Claro)">
+        <i class="fa-solid fa-moon"></i>
       </button>
+
+      <div class="user-profile-summary">
+        <img id="userAvatar" src="" alt="Avatar" class="avatar-small">
+        <div class="user-text">
+          <span id="userName" class="user-name">Cargando...</span>
+          <span id="userRoleBadge" class="badge-role">ROL</span>
+        </div>
+        <button id="btnLogout" class="btn-logout" title="Cerrar Sesión">
+          <i class="fa-solid fa-power-off"></i>
+        </button>
+      </div>
     </div>
   </header>
 
   <!-- Layout Principal -->
   <div class="dashboard-layout">
     
-    <!-- Barra Lateral Mica -->
+    <!-- Sidebar Mica -->
     <aside class="sidebar-glass">
       <nav>
         <ul class="nav-menu">
@@ -42,160 +50,233 @@
             </button>
           </li>
           <li>
-            <button class="nav-link" data-tab="tab-admin-teachers" id="menuAdminTeachers" style="display: none;">
-              <i class="fa-solid fa-chalkboard-user"></i> Gestión de Docentes
+            <button class="nav-link" data-tab="tab-academic" id="menuAcademic" style="display: none;">
+              <i class="fa-solid fa-graduation-cap"></i> Módulo Académico
+            </button>
+          </li>
+          <li>
+            <button class="nav-link" data-tab="tab-resources">
+              <i class="fa-solid fa-calendar-check"></i> Reserva de Recursos
             </button>
           </li>
           <li>
             <button class="nav-link" data-tab="tab-admin-users" id="menuAdminUsers" style="display: none;">
-              <i class="fa-solid fa-users-gear"></i> Expedientes y Usuarios
-            </button>
-          </li>
-          <li>
-            <button class="nav-link" data-tab="tab-academic" id="menuAcademic" style="display: none;">
-              <i class="fa-solid fa-book-bookmark"></i> Módulo Académico
-            </button>
-          </li>
-          <li>
-            <button class="nav-link" data-tab="tab-student" id="menuStudent" style="display: none;">
-              <i class="fa-solid fa-graduation-cap"></i> Mi Expediente
+              <i class="fa-solid fa-users-gear"></i> Gestión de Usuarios
             </button>
           </li>
           <li>
             <button class="nav-link" data-tab="tab-profile">
-              <i class="fa-solid fa-sliders"></i> Mi Perfil
+              <i class="fa-solid fa-user-gear"></i> Mi Perfil
             </button>
           </li>
         </ul>
       </nav>
     </aside>
 
-    <!-- Área de Contenido -->
+    <!-- Área Principal de Contenido -->
     <main class="main-content">
 
       <!-- Pestaña 1: Tablón Oficial -->
       <section id="tab-announcements" class="tab-content">
         <div class="glass-card">
-          <h2><i class="fa-solid fa-bullhorn text-teal"></i> Tablón Oficial de Comunicados</h2>
-          <p class="subtitle">Anuncios y avisos institucionales del Colegio Eton</p>
+          <h2><i class="fa-solid fa-bullhorn" style="color: var(--accent-teal);"></i> Tablón de Comunicados</h2>
+          <p class="subtitle">Anuncios e informaciones oficiales del Colegio Eton</p>
           <hr class="divider">
-          
-          <div class="announcement-list">
-            <article class="announcement-item">
-              <h3>Bienvenidos al Ciclo Lectivo — Colegio Eton</h3>
-              <p class="announcement-meta"><i class="fa-regular fa-clock"></i> Publicado por Dirección General • Hoy</p>
-              <p>Les damos la más cordial bienvenida a nuestra Intranet Escolar. A través de este portal podrán consultar expedientes, calificaciones y anuncios oficiales.</p>
-            </article>
+
+          <div id="announcementFormContainer" style="display: none; margin-bottom: 20px;">
+            <form id="announcementForm" class="form-grid">
+              <div class="form-group" style="grid-column: span 2;">
+                <label for="annTitle"><i class="fa-solid fa-heading"></i> Título del Comunicado</label>
+                <input type="text" id="annTitle" placeholder="Ej. Suspensión de lecciones por mantenimiento" required>
+              </div>
+              <div class="form-group" style="grid-column: span 2;">
+                <label for="annBody"><i class="fa-solid fa-paragraph"></i> Mensaje</label>
+                <textarea id="annBody" rows="3" placeholder="Escriba el comunicado..." required></textarea>
+              </div>
+              <button type="submit" class="btn-primary" style="grid-column: span 2; justify-self: start;">
+                <i class="fa-solid fa-paper-plane"></i> Publicar Comunicado
+              </button>
+            </form>
+            <hr class="divider" style="margin-top: 20px;">
           </div>
+
+          <div id="announcementList" style="display: flex; flex-direction: column; gap: 14px;"></div>
         </div>
       </section>
 
-      <!-- Pestaña 2: Gestión de Docentes (Admin) -->
-      <section id="tab-admin-teachers" class="tab-content" style="display: none;">
-        <div class="glass-card">
-          <h2><i class="fa-solid fa-chalkboard-user text-teal"></i> Gestión del Cuerpo Docente</h2>
-          <p class="subtitle">Administración de profesores y asignación de materias</p>
-          <hr class="divider">
-          <p>Módulo de registro e inspección de docentes habilitado para administración.</p>
-        </div>
-      </section>
-
-      <!-- Pestaña 3: Expedientes y Usuarios (Admin) -->
-      <section id="tab-admin-users" class="tab-content" style="display: none;">
-        <div class="glass-card">
-          <h2><i class="fa-solid fa-users-gear text-teal"></i> Gestión de Expedientes e Inscripciones</h2>
-          <p class="subtitle">Alta, baja y edición de estudiantes y encargados</p>
-          <hr class="divider">
-          <p>Administración de expedientes de la comunidad educativa.</p>
-        </div>
-      </section>
-
-      <!-- Pestaña 4: Módulo Académico (Admin / Docente) -->
+      <!-- Pestaña 2: Módulo Académico -->
       <section id="tab-academic" class="tab-content" style="display: none;">
         <div class="glass-card">
-          <h2><i class="fa-solid fa-book-bookmark text-teal"></i> Módulo Académico</h2>
-          <p class="subtitle">Ingreso de calificaciones y control de asistencia</p>
+          <h2><i class="fa-solid fa-graduation-cap" style="color: var(--accent-teal);"></i> Registro de Calificaciones y Asistencia</h2>
+          <p class="subtitle">Consulta e ingreso de expediente académico</p>
           <hr class="divider">
-          <p>Gestión del libro de notas y registro de asistencia diaria.</p>
+
+          <div class="table-container">
+            <table class="glass-table">
+              <thead>
+                <tr>
+                  <th>Materia</th>
+                  <th>Estudiante</th>
+                  <th>Parcial 1</th>
+                  <th>Parcial 2</th>
+                  <th>Asistencia</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody id="academicTableBody">
+                <tr>
+                  <td>Programación Web</td>
+                  <td>Angel Salazar</td>
+                  <td>98%</td>
+                  <td>95%</td>
+                  <td>100%</td>
+                  <td><span class="badge-role">Aprobado</span></td>
+                </tr>
+                <tr>
+                  <td>Base de Datos</td>
+                  <td>Angel Salazar</td>
+                  <td>90%</td>
+                  <td>92%</td>
+                  <td>98%</td>
+                  <td><span class="badge-role">Aprobado</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 
-      <!-- Pestaña 5: Mi Expediente (Estudiante / Padre) -->
-      <section id="tab-student" class="tab-content" style="display: none;">
+      <!-- Pestaña 3: Reserva de Recursos -->
+      <section id="tab-resources" class="tab-content" style="display: none;">
         <div class="glass-card">
-          <h2><i class="fa-solid fa-graduation-cap text-teal"></i> Mi Expediente Académico</h2>
-          <p class="subtitle">Consulta de notas, asistencia e historial personal</p>
+          <h2><i class="fa-solid fa-calendar-check" style="color: var(--accent-teal);"></i> Reserva de Aulas y Recursos</h2>
+          <p class="subtitle">Solicitud de espacios institucionales y laboratorio de cómputo</p>
           <hr class="divider">
-          <p>Información privada y confidencial del estudiante.</p>
+
+          <form id="resourceForm" class="form-grid">
+            <div class="form-group">
+              <label for="resType"><i class="fa-solid fa-building"></i> Recurso / Aula</label>
+              <select id="resType">
+                <option value="Laboratorio Cómputo 1">Laboratorio Cómputo 1</option>
+                <option value="Proyector Multimedia A">Proyector Multimedia A</option>
+                <option value="Auditorio Principal">Auditorio Principal</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="resDate"><i class="fa-solid fa-calendar"></i> Fecha</label>
+              <input type="date" id="resDate" required>
+            </div>
+            <div class="form-group">
+              <label for="resTime"><i class="fa-solid fa-clock"></i> Hora</label>
+              <input type="time" id="resTime" required>
+            </div>
+            <button type="submit" class="btn-primary" style="margin-top: 22px;">
+              <i class="fa-solid fa-bookmark"></i> Confirmar Reserva
+            </button>
+          </form>
         </div>
       </section>
 
-  <!-- Pestaña 6: Configuración de Perfil Completa -->
-  <section id="tab-profile" class="tab-content" style="display: none;">
-    <div class="glass-card">
-      <h2><i class="fa-solid fa-sliders text-teal"></i> Configuración de Mi Perfil</h2>
-      <p class="subtitle">Actualiza tus datos de contacto e identificación personal</p>
-      <hr class="divider">
-      
-      <!-- Contenedor para Notificaciones Modernas -->
-      <div id="toastContainer" class="toast-container"></div>
+      <!-- Pestaña 4: Gestión de Usuarios (Admin) -->
+      <section id="tab-admin-users" class="tab-content" style="display: none;">
+        <div class="glass-card">
+          <h2><i class="fa-solid fa-users-gear" style="color: var(--accent-teal);"></i> Gestión de Personas y Roles</h2>
+          <p class="subtitle">Alta, consulta y administración de expedientes institucionales</p>
+          <hr class="divider">
 
-      <div class="profile-container">
-        <div class="avatar-upload-section">
-          <img id="profileLargeAvatar" src="https://ui-avatars.com/api/?name=Usuario&background=2a9d8f&color=fff" alt="Avatar Ampliado del Usuario" class="avatar-large">
-          <span class="badge-role" id="profileRoleBadge">ROL</span>
-          
-          <div class="avatar-actions">
-            <label for="avatarInput" class="btn-secondary-sm">
-              <i class="fa-solid fa-camera"></i> Cambiar Foto
-            </label>
-            <input type="file" id="avatarInput" accept="image/*" style="display: none;">
-            
-            <button type="button" id="btnDeleteAvatar" class="btn-danger-sm">
-              <i class="fa-solid fa-trash-can"></i> Borrar Foto
-            </button>
+          <div class="table-container">
+            <table class="glass-table">
+              <thead>
+                <tr>
+                  <th>Usuario</th>
+                  <th>Nombre Completo</th>
+                  <th>Rol</th>
+                  <th>Correo</th>
+                  <th>Cédula</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>admin</td>
+                  <td>Administrador General</td>
+                  <td><span class="badge-role">ADMIN</span></td>
+                  <td>admin@eton.edu</td>
+                  <td>1-0000-0000</td>
+                </tr>
+                <tr>
+                  <td>profesor_perez</td>
+                  <td>Carlos Pérez</td>
+                  <td><span class="badge-role" style="background: var(--accent-purple);">DOCENTE</span></td>
+                  <td>cperez@eton.edu</td>
+                  <td>1-0888-0999</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
+      </section>
 
-        <form id="profileForm" class="profile-form" novalidate>
-          <div class="form-grid">
-            <div class="form-group">
-              <label for="profileFullName"><i class="fa-solid fa-id-card"></i> Nombre Completo *</label>
-              <input type="text" id="profileFullName" required pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$" placeholder="Ej. Ana Martínez">
-              <small class="error-msg" id="errFullName"></small>
+      <!-- Pestaña 5: Mi Perfil -->
+      <section id="tab-profile" class="tab-content" style="display: none;">
+        <div class="glass-card">
+          <h2><i class="fa-solid fa-user-gear" style="color: var(--accent-teal);"></i> Configuración de Mi Perfil</h2>
+          <p class="subtitle">Ajustes personales, fotografía y datos institucionales</p>
+          <hr class="divider">
+
+          <div class="profile-container">
+            <div class="avatar-upload-section">
+              <img id="profileLargeAvatar" src="" alt="Avatar Ampliado" class="avatar-large">
+              <span class="badge-role" id="profileRoleBadge">ROL</span>
+              
+              <div style="display: flex; gap: 8px; margin-top: 10px;">
+                <label for="avatarInput" class="btn-primary" style="padding: 6px 12px; font-size: 0.82rem; cursor: pointer;">
+                  <i class="fa-solid fa-camera"></i> Cambiar
+                </label>
+                <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+                
+                <button type="button" id="btnDeleteAvatar" class="btn-logout" style="padding: 6px 12px; font-size: 0.82rem;">
+                  <i class="fa-solid fa-trash-can"></i> Borrar
+                </button>
+              </div>
             </div>
 
-            <div class="form-group">
-              <label for="profileUsername"><i class="fa-solid fa-user"></i> Nombre de Usuario</label>
-              <input type="text" id="profileUsername" readonly class="input-disabled">
-            </div>
+            <form id="profileForm" class="form-grid" style="flex: 1;" novalidate>
+              <div class="form-group">
+                <label for="profileFullName"><i class="fa-solid fa-id-card"></i> Nombre Completo *</label>
+                <input type="text" id="profileFullName" required placeholder="Ej. Ana Martínez">
+                <small class="error-msg" id="errFullName"></small>
+              </div>
 
-            <div class="form-group">
-              <label for="profileIdNumber"><i class="fa-solid fa-address-card"></i> Identificación / Cédula *</label>
-              <input type="text" id="profileIdNumber" required placeholder="Ej. 112345678" maxlength="12">
-              <small class="error-msg" id="errIdNumber"></small>
-            </div>
+              <div class="form-group">
+                <label for="profileUsername"><i class="fa-solid fa-user"></i> Usuario</label>
+                <input type="text" id="profileUsername" readonly class="input-disabled">
+              </div>
 
-            <div class="form-group">
-              <label for="profileEmail"><i class="fa-solid fa-envelope"></i> Correo Electrónico *</label>
-              <input type="email" id="profileEmail" required placeholder="correo@ejemplo.com">
-              <small class="error-msg" id="errEmail"></small>
-            </div>
+              <div class="form-group">
+                <label for="profileIdNumber"><i class="fa-solid fa-address-card"></i> Identificación / Cédula *</label>
+                <input type="text" id="profileIdNumber" required placeholder="Solo números" maxlength="12">
+                <small class="error-msg" id="errIdNumber"></small>
+              </div>
 
-            <div class="form-group">
-              <label for="profilePhone"><i class="fa-solid fa-phone"></i> Teléfono de Contacto *</label>
-              <input type="tel" id="profilePhone" required placeholder="Ej. 88888888" maxlength="8">
-              <small class="error-msg" id="errPhone"></small>
-            </div>
+              <div class="form-group">
+                <label for="profileEmail"><i class="fa-solid fa-envelope"></i> Correo Electrónico *</label>
+                <input type="email" id="profileEmail" required placeholder="correo@ejemplo.com">
+                <small class="error-msg" id="errEmail"></small>
+              </div>
+
+              <div class="form-group">
+                <label for="profilePhone"><i class="fa-solid fa-phone"></i> Teléfono *</label>
+                <input type="tel" id="profilePhone" required placeholder="Solo números (8 dígitos)" maxlength="8">
+                <small class="error-msg" id="errPhone"></small>
+              </div>
+
+              <button type="submit" class="btn-primary" style="grid-column: span 2; justify-self: start; margin-top: 10px;">
+                <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
+              </button>
+            </form>
           </div>
-
-          <button type="submit" class="btn-primary" style="margin-top: 1.5rem; width: auto;">
-            <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
-          </button>
-        </form>
-      </div>
-    </div>
-  </section>
+        </div>
+      </section>
 
     </main>
   </div>

@@ -1,16 +1,60 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // 1. Cargar Sesión y Tema
   let sessionData = JSON.parse(localStorage.getItem('userSession')) || {
     username: 'admin',
-    fullName: 'Administrador Principal',
+    fullName: 'Angel Salazar',
     role: 'admin',
     idNumber: '112345678',
     email: 'admin@eton.edu',
-    phone: '88880000',
+    phone: '88888888',
     avatarUrl: '',
-    loggedIn: true
+    theme: 'dark'
   };
 
-  // Referencias UI
+  // Configurar Tema
+  const htmlEl = document.documentElement;
+  const btnThemeToggle = document.getElementById('btnThemeToggle');
+  
+  function applyTheme(theme) {
+    htmlEl.setAttribute('data-theme', theme);
+    sessionData.theme = theme;
+    localStorage.setItem('userSession', JSON.stringify(sessionData));
+    if (btnThemeToggle) {
+      btnThemeToggle.innerHTML = theme === 'dark' ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+    }
+  }
+
+  applyTheme(sessionData.theme || 'dark');
+
+  if (btnThemeToggle) {
+    btnThemeToggle.addEventListener('click', () => {
+      const currentTheme = htmlEl.getAttribute('data-theme');
+      applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
+    });
+  }
+
+  // 2. Sistema de Notificaciones Toast Flotantes
+  function showToast(message, type = 'success') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = `custom-toast toast-${type}`;
+    
+    let icon = 'fa-circle-check';
+    if (type === 'warning') icon = 'fa-triangle-exclamation';
+    if (type === 'error') icon = 'fa-circle-xmark';
+
+    toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
+    container.appendChild(toast);
+
+    setTimeout(() => {
+      toast.style.animation = 'fadeOut 0.3s ease forwards';
+      setTimeout(() => toast.remove(), 300);
+    }, 3800);
+  }
+
+  // 3. Render de Datos de Usuario
   const userNameEl = document.getElementById('userName');
   const userRoleBadgeEl = document.getElementById('userRoleBadge');
   const userAvatarEl = document.getElementById('userAvatar');
@@ -22,18 +66,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const profilePhoneEl = document.getElementById('profilePhone');
   const profileRoleBadgeEl = document.getElementById('profileRoleBadge');
   const profileLargeAvatarEl = document.getElementById('profileLargeAvatar');
-  
-  const avatarInput = document.getElementById('avatarInput');
-  const btnDeleteAvatar = document.getElementById('btnDeleteAvatar');
-  const profileForm = document.getElementById('profileForm');
 
-  const displayName = sessionData.fullName || sessionData.username || 'Usuario';
   const userRole = (sessionData.role || 'admin').toLowerCase();
-  
-  const defaultAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=2a9d8f&color=fff&bold=true`;
-  let currentAvatar = sessionData.avatarUrl || defaultAvatar;
+  const displayName = sessionData.fullName || sessionData.username || 'Usuario';
+  const defaultAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=0d9488&color=fff&bold=true`;
+  const currentAvatar = sessionData.avatarUrl || defaultAvatar;
 
-  // Render inicial
   if (userNameEl) userNameEl.textContent = displayName;
   if (userRoleBadgeEl) userRoleBadgeEl.textContent = userRole.toUpperCase();
   if (userAvatarEl) userAvatarEl.src = currentAvatar;
@@ -46,36 +84,16 @@ document.addEventListener('DOMContentLoaded', () => {
   if (profileRoleBadgeEl) profileRoleBadgeEl.textContent = userRole.toUpperCase();
   if (profileLargeAvatarEl) profileLargeAvatarEl.src = currentAvatar;
 
-  // Sistema de Notificaciones Toast (Reemplaza los alert)
-  function showToast(message, type = 'success') {
-    const container = document.getElementById('toastContainer');
-    if (!container) return;
-
-    const toast = document.createElement('div');
-    toast.className = `custom-toast toast-${type}`;
-    toast.innerHTML = `
-      <i class="fa-solid ${type === 'success' ? 'fa-circle-check' : 'fa-triangle-exclamation'}"></i>
-      <span>${message}</span>
-    `;
-
-    container.appendChild(toast);
-
-    setTimeout(() => {
-      toast.classList.add('fade-out');
-      setTimeout(() => toast.remove(), 300);
-    }, 4000);
-  }
-
-  // VALIDACIONES EN TIEMPO REAL: Bloquear entrada de letras donde solo van números
+  // 4. VALIDACIONES EN TIEMPO REAL: Bloquear entrada de caracteres no válidos
   if (profileIdNumberEl) {
     profileIdNumberEl.addEventListener('input', (e) => {
-      e.target.value = e.target.value.replace(/[^0-9]/g, ''); // Remueve cualquier letra
+      e.target.value = e.target.value.replace(/[^0-9]/g, ''); // Solo números
     });
   }
 
   if (profilePhoneEl) {
     profilePhoneEl.addEventListener('input', (e) => {
-      e.target.value = e.target.value.replace(/[^0-9]/g, ''); // Remueve cualquier letra
+      e.target.value = e.target.value.replace(/[^0-9]/g, ''); // Solo números
     });
   }
 
@@ -85,7 +103,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Subir Foto
+  // 5. Gestión de Foto de Perfil
+  const avatarInput = document.getElementById('avatarInput');
+  const btnDeleteAvatar = document.getElementById('btnDeleteAvatar');
+
   if (avatarInput) {
     avatarInput.addEventListener('change', (e) => {
       const file = e.target.files[0];
@@ -97,33 +118,33 @@ document.addEventListener('DOMContentLoaded', () => {
           profileLargeAvatarEl.src = newAvatarUrl;
           sessionData.avatarUrl = newAvatarUrl;
           localStorage.setItem('userSession', JSON.stringify(sessionData));
-          showToast('Foto de perfil actualizada correctamente', 'success');
+          showToast('Foto de perfil actualizada con éxito', 'success');
         };
         reader.readAsDataURL(file);
       }
     });
   }
 
-  // Borrar Foto
   if (btnDeleteAvatar) {
     btnDeleteAvatar.addEventListener('click', () => {
       if (userRole === 'estudiante') {
-        showToast('Atención Estudiante: Es un requisito institucional mantener una foto de perfil visible.', 'warning');
+        showToast('Aviso Estudiantil: Es obligatorio mantener una foto visible en su expediente.', 'warning');
       }
 
       sessionData.avatarUrl = '';
-      const fallbackAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(sessionData.fullName)}&background=2a9d8f&color=fff&bold=true`;
-      userAvatarEl.src = fallbackAvatar;
-      profileLargeAvatarEl.src = fallbackAvatar;
+      const fallback = `https://ui-avatars.com/api/?name=${encodeURIComponent(sessionData.fullName)}&background=0d9488&color=fff&bold=true`;
+      userAvatarEl.src = fallback;
+      profileLargeAvatarEl.src = fallback;
       localStorage.setItem('userSession', JSON.stringify(sessionData));
       
       if (userRole !== 'estudiante') {
-        showToast('Foto de perfil eliminada.', 'success');
+        showToast('Foto de perfil eliminada', 'success');
       }
     });
   }
 
-  // Validar y Guardar Formulario
+  // 6. Guardar Perfil con Validación Estricta
+  const profileForm = document.getElementById('profileForm');
   if (profileForm) {
     profileForm.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -132,46 +153,35 @@ document.addEventListener('DOMContentLoaded', () => {
       const idNumber = profileIdNumberEl.value.trim();
       const email = profileEmailEl.value.trim();
       const phone = profilePhoneEl.value.trim();
-
-      // Expresión regular para correo válido
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-      let isValid = true;
+      let valid = true;
 
       if (!fullName) {
-        document.getElementById('errFullName').textContent = 'El nombre es obligatorio.';
-        isValid = false;
-      } else {
-        document.getElementById('errFullName').textContent = '';
-      }
+        document.getElementById('errFullName').textContent = 'Nombre requerido.';
+        valid = false;
+      } else { document.getElementById('errFullName').textContent = ''; }
 
-      if (!idNumber || idNumber.length < 8) {
-        document.getElementById('errIdNumber').textContent = 'Ingrese una cédula válida (mínimo 8 dígitos).';
-        isValid = false;
-      } else {
-        document.getElementById('errIdNumber').textContent = '';
-      }
+      if (idNumber.length < 8) {
+        document.getElementById('errIdNumber').textContent = 'Cédula debe tener al menos 8 dígitos.';
+        valid = false;
+      } else { document.getElementById('errIdNumber').textContent = ''; }
 
-      if (!email || !emailRegex.test(email)) {
-        document.getElementById('errEmail').textContent = 'Ingrese un correo electrónico válido.';
-        isValid = false;
-      } else {
-        document.getElementById('errEmail').textContent = '';
-      }
+      if (!emailRegex.test(email)) {
+        document.getElementById('errEmail').textContent = 'Correo con formato inválido.';
+        valid = false;
+      } else { document.getElementById('errEmail').textContent = ''; }
 
-      if (!phone || phone.length < 8) {
-        document.getElementById('errPhone').textContent = 'El teléfono debe tener 8 dígitos.';
-        isValid = false;
-      } else {
-        document.getElementById('errPhone').textContent = '';
-      }
+      if (phone.length < 8) {
+        document.getElementById('errPhone').textContent = 'Teléfono debe tener 8 dígitos.';
+        valid = false;
+      } else { document.getElementById('errPhone').textContent = ''; }
 
-      if (!isValid) {
-        showToast('Por favor corrija los errores del formulario.', 'warning');
+      if (!valid) {
+        showToast('Por favor, corrija los datos requeridos', 'warning');
         return;
       }
 
-      // Guardar
       sessionData.fullName = fullName;
       sessionData.idNumber = idNumber;
       sessionData.email = email;
@@ -179,27 +189,62 @@ document.addEventListener('DOMContentLoaded', () => {
 
       localStorage.setItem('userSession', JSON.stringify(sessionData));
       if (userNameEl) userNameEl.textContent = fullName;
-      
-      showToast('¡Perfil e información guardados con éxito!', 'success');
+      showToast('¡Información guardada correctamente!', 'success');
     });
   }
 
-  // Visibilidad por Rol y Navegación
-  const menuAdminTeachers = document.getElementById('menuAdminTeachers');
-  const menuAdminUsers = document.getElementById('menuAdminUsers');
-  const menuAcademic = document.getElementById('menuAcademic');
-  const menuStudent = document.getElementById('menuStudent');
+  // 7. Tablón Dinámico de Comunicados
+  const announcements = [
+    { title: 'Bienvenidos al Ciclo Lectivo — Colegio Eton', author: 'Dirección General', body: 'Les damos la más cordial bienvenida a nuestra Intranet Escolar. A través de este portal podrán consultar expedientes y notas.' },
+    { title: 'Próxima Entrega de Reportes de Calificaciones', author: 'Coordinación Académica', body: 'Se recuerda que la entrega de notas del primer periodo estará disponible este viernes en el módulo académico.' }
+  ];
 
-  if (userRole === 'admin') {
-    if (menuAdminTeachers) menuAdminTeachers.style.display = 'block';
-    if (menuAdminUsers) menuAdminUsers.style.display = 'block';
-    if (menuAcademic) menuAcademic.style.display = 'block';
-  } else if (userRole === 'docente') {
-    if (menuAcademic) menuAcademic.style.display = 'block';
-  } else if (userRole === 'estudiante' || userRole === 'padre') {
-    if (menuStudent) menuStudent.style.display = 'block';
+  function renderAnnouncements() {
+    const list = document.getElementById('announcementList');
+    if (!list) return;
+    list.innerHTML = announcements.map(item => `
+      <article style="background: var(--card-inner-bg); border: 1px solid var(--glass-border); padding: 16px; border-radius: 12px;">
+        <h3 style="font-size: 1.1rem; margin-bottom: 6px;">${item.title}</h3>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">
+          <i class="fa-regular fa-clock"></i> Publicado por ${item.author}
+        </p>
+        <p style="font-size: 0.92rem;">${item.body}</p>
+      </article>
+    `).join('');
+  }
+  renderAnnouncements();
+
+  // Permisos según Rol
+  if (userRole === 'admin' || userRole === 'docente') {
+    const annContainer = document.getElementById('announcementFormContainer');
+    if (annContainer) annContainer.style.display = 'block';
   }
 
+  const annForm = document.getElementById('announcementForm');
+  if (annForm) {
+    annForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title = document.getElementById('annTitle').value.trim();
+      const body = document.getElementById('annBody').value.trim();
+      
+      if (title && body) {
+        announcements.unshift({ title, author: displayName, body });
+        renderAnnouncements();
+        annForm.reset();
+        showToast('¡Comunicado publicado exitosamente!', 'success');
+      }
+    });
+  }
+
+  // Visibilidad Menús Navegación
+  if (userRole === 'admin') {
+    document.getElementById('menuAdminUsers').style.display = 'block';
+    document.getElementById('menuAcademic').style.display = 'block';
+  } else if (userRole === 'docente' || userRole === 'estudiante') {
+    document.getElementById('menuAcademic').style.display = 'block';
+  }
+
+  // Navegación por Pestañas
   const navButtons = document.querySelectorAll('.nav-link');
   const tabSections = document.querySelectorAll('.tab-content');
 
@@ -209,21 +254,25 @@ document.addEventListener('DOMContentLoaded', () => {
       const targetTabId = button.getAttribute('data-tab');
 
       navButtons.forEach(btn => btn.classList.remove('active'));
-      tabSections.forEach(section => {
-        section.classList.remove('active');
-        section.style.display = 'none';
-      });
+      tabSections.forEach(section => section.style.display = 'none');
 
       button.classList.add('active');
-
       const targetSection = document.getElementById(targetTabId);
-      if (targetSection) {
-        targetSection.classList.add('active');
-        targetSection.style.display = 'block';
-      }
+      if (targetSection) targetSection.style.display = 'block';
     });
   });
 
+  // Reserva de Recursos
+  const resForm = document.getElementById('resourceForm');
+  if (resForm) {
+    resForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      showToast('Reserva registrada en el sistema.', 'success');
+      resForm.reset();
+    });
+  }
+
+  // Logout
   const btnLogout = document.getElementById('btnLogout');
   if (btnLogout) {
     btnLogout.addEventListener('click', () => {
