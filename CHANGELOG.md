@@ -86,3 +86,16 @@
 ### Corregido
 - Solución al error de carga de CSS en el Navbar y la Barra Lateral de `dashboard.html`[cite: 11].
 - Reestructuración de script `js/dashboard.js` para asegurar la carga inmediata de avatares, nombres de usuario y roles dinámicos[cite: 1, 7].
+
+# Changelog
+
+## [1.1.0] - Modificaciones UI y Controladores Frontend
+
+### Añadido
+- Creado el archivo controlador `js/dashboard.js` para manejar la navegación por pestañas, permisos por rol y el avatar del usuario.
+- Integrada la librería FontAwesome v6 en `index.html` y `dashboard.html`.
+
+### Cambiado
+- Rediseñado el formulario de login/registro en `index.html`: ahora centrado en pantalla con tarjeta flotante glassmorphism.
+- Sustituidos todos los emojis del menú y botones por iconos vectoriales profesionales.
+- Actualizados los estilos generales en `css/style.css` para mejorar la responsividad y jerarquía visual.
