@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Colegio Eton — Acceso Institucional</title>
-  <!-- Iconos Profesionales (FontAwesome) -->
+  <!-- Iconos FontAwesome v6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -31,8 +31,18 @@
       <!-- Formulario de Inicio de Sesión -->
       <form id="loginForm" class="auth-form active">
         <div class="form-group">
+          <label for="loginRole"><i class="fa-solid fa-user-shield"></i> Ingresar como</label>
+          <select id="loginRole" required>
+            <option value="admin">Administrador</option>
+            <option value="docente">Docente / Profesor</option>
+            <option value="estudiante" selected>Estudiante</option>
+            <option value="padre">Padre de Familia / Encargado</option>
+          </select>
+        </div>
+
+        <div class="form-group">
           <label for="loginUsername"><i class="fa-solid fa-user"></i> Nombre de Usuario</label>
-          <input type="text" id="loginUsername" placeholder="Ej. admin" required>
+          <input type="text" id="loginUsername" placeholder="Ej. amartinez" required>
         </div>
 
         <div class="form-group">
@@ -62,6 +72,7 @@
           <select id="regRole" required>
             <option value="estudiante">Estudiante</option>
             <option value="docente">Docente / Profesor</option>
+            <option value="padre">Padre de Familia / Encargado</option>
             <option value="admin">Administrador</option>
           </select>
         </div>

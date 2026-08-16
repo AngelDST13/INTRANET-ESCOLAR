@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Cargar datos de la sesión o crear una por defecto (ADMIN) para pruebas
+  // Cargar sesión guardada
   let sessionData = JSON.parse(localStorage.getItem('userSession'));
 
   if (!sessionData) {
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('userSession', JSON.stringify(sessionData));
   }
 
-  // 2. Renderizar Datos del Usuario en el Navbar y Perfil
+  // Elementos de la UI
   const userNameEl = document.getElementById('userName');
   const userRoleBadgeEl = document.getElementById('userRoleBadge');
   const userAvatarEl = document.getElementById('userAvatar');
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (profileRoleBadgeEl) profileRoleBadgeEl.textContent = userRole.toUpperCase();
   if (profileLargeAvatarEl) profileLargeAvatarEl.src = avatarUrl;
 
-  // 3. Mostrar u Ocultar Opciones de Menú según el Rol
+  // Menús según el Rol
   const menuAdminTeachers = document.getElementById('menuAdminTeachers');
   const menuAdminUsers = document.getElementById('menuAdminUsers');
   const menuAcademic = document.getElementById('menuAcademic');
@@ -48,11 +48,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (menuAcademic) menuAcademic.style.display = 'block';
   } else if (userRole === 'docente') {
     if (menuAcademic) menuAcademic.style.display = 'block';
-  } else if (userRole === 'estudiante') {
+  } else if (userRole === 'estudiante' || userRole === 'padre') {
     if (menuStudent) menuStudent.style.display = 'block';
   }
 
-  // 4. Lógica de Navegación por Pestañas (Hace responder los clics del menú)
+  // Navegación por Pestañas
   const navButtons = document.querySelectorAll('.nav-link');
   const tabSections = document.querySelectorAll('.tab-content');
 
@@ -61,17 +61,14 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const targetTabId = button.getAttribute('data-tab');
 
-      // Desactivar todos los botones y ocultar secciones
       navButtons.forEach(btn => btn.classList.remove('active'));
       tabSections.forEach(section => {
         section.classList.remove('active');
         section.style.display = 'none';
       });
 
-      // Activar el botón presionado
       button.classList.add('active');
 
-      // Mostrar el panel correspondiente
       const targetSection = document.getElementById(targetTabId);
       if (targetSection) {
         targetSection.classList.add('active');
@@ -80,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 5. Botón Cerrar Sesión
+  // Cerrar Sesión
   const btnLogout = document.getElementById('btnLogout');
   if (btnLogout) {
     btnLogout.addEventListener('click', () => {

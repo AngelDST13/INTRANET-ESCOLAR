@@ -99,3 +99,5 @@
 - Rediseñado el formulario de login/registro en `index.html`: ahora centrado en pantalla con tarjeta flotante glassmorphism.
 - Sustituidos todos los emojis del menú y botones por iconos vectoriales profesionales.
 - Actualizados los estilos generales en `css/style.css` para mejorar la responsividad y jerarquía visual.
+
+Añadido selector de rol en el formulario de inicio de sesión (Administrador, Docente, Estudiante y Padre de Familia)

@@ -7,3 +7,5 @@
 ## Requerimientos No Funcionales (RNF)
 - **RNF-01 (Interfaz y Estética)**: Utilizar iconografía vectorial estandarizada (FontAwesome) para elementos visuales y de navegación, evitando emojis o texto plano.
 - **RNF-02 (Diseño UI/UX)**: Tarjeta de acceso totalmente centrada, responsiva y con estilos visuales modernos (efectos de transparencia y bordes suavizados).
+
+RF-01 de Autenticación ahora se incluye el rol Padre de Familia / Encargado.

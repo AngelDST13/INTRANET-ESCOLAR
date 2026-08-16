@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById('loginForm');
   const registerForm = document.getElementById('registerForm');
 
-  // Cambiar a pestaña de Login
+  // Alternar a Iniciar Sesión
   if (tabLoginBtn) {
     tabLoginBtn.addEventListener('click', () => {
       tabLoginBtn.classList.add('active');
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Cambiar a pestaña de Registro
+  // Alternar a Crear Cuenta
   if (tabRegisterBtn) {
     tabRegisterBtn.addEventListener('click', () => {
       tabRegisterBtn.classList.add('active');
@@ -24,16 +24,37 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Manejo de inicio de sesión
+  // Procesar Login
   if (loginForm) {
     loginForm.addEventListener('submit', (e) => {
       e.preventDefault();
       const username = document.getElementById('loginUsername').value;
+      const selectedRole = document.getElementById('loginRole').value;
 
       const session = {
         username: username,
-        fullName: username === 'admin' ? 'Administrador Principal' : username,
-        role: username === 'admin' ? 'admin' : 'estudiante',
+        fullName: username,
+        role: selectedRole,
+        loggedIn: true
+      };
+
+      localStorage.setItem('userSession', JSON.stringify(session));
+      window.location.href = 'dashboard.html';
+    });
+  }
+
+  // Procesar Registro
+  if (registerForm) {
+    registerForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fullName = document.getElementById('regFullName').value;
+      const username = document.getElementById('regUsername').value;
+      const role = document.getElementById('regRole').value;
+
+      const session = {
+        username: username,
+        fullName: fullName,
+        role: role,
         loggedIn: true
       };
 
