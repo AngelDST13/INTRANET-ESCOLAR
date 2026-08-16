@@ -130,60 +130,72 @@
         </div>
       </section>
 
-      <!-- Pestaña 6: Configuración de Perfil Completa -->
-      <section id="tab-profile" class="tab-content" style="display: none;">
-        <div class="glass-card">
-          <h2><i class="fa-solid fa-sliders text-teal"></i> Configuración de Mi Perfil</h2>
-          <p class="subtitle">Actualiza tus datos de contacto e identificación personal</p>
-          <hr class="divider">
+  <!-- Pestaña 6: Configuración de Perfil Completa -->
+  <section id="tab-profile" class="tab-content" style="display: none;">
+    <div class="glass-card">
+      <h2><i class="fa-solid fa-sliders text-teal"></i> Configuración de Mi Perfil</h2>
+      <p class="subtitle">Actualiza tus datos de contacto e identificación personal</p>
+      <hr class="divider">
+      
+      <!-- Contenedor para Notificaciones Modernas -->
+      <div id="toastContainer" class="toast-container"></div>
+
+      <div class="profile-container">
+        <div class="avatar-upload-section">
+          <img id="profileLargeAvatar" src="https://ui-avatars.com/api/?name=Usuario&background=2a9d8f&color=fff" alt="Avatar Ampliado del Usuario" class="avatar-large">
+          <span class="badge-role" id="profileRoleBadge">ROL</span>
           
-          <div class="profile-container">
-            <div class="avatar-upload-section">
-              <img id="profileLargeAvatar" src="https://ui-avatars.com/api/?name=Usuario&background=2a9d8f&color=fff" alt="Avatar Ampliado del Usuario" class="avatar-large">
-              <span class="badge-role" id="profileRoleBadge">ROL</span>
-              
-              <!-- Cambiar Foto de Perfil -->
-              <label for="avatarInput" class="btn-secondary-sm">
-                <i class="fa-solid fa-camera"></i> Cambiar Foto
-              </label>
-              <input type="file" id="avatarInput" accept="image/*" style="display: none;">
-            </div>
-
-            <form id="profileForm" class="profile-form">
-              <div class="form-grid">
-                <div class="form-group">
-                  <label for="profileFullName"><i class="fa-solid fa-id-card"></i> Nombre Completo</label>
-                  <input type="text" id="profileFullName" required>
-                </div>
-
-                <div class="form-group">
-                  <label for="profileUsername"><i class="fa-solid fa-user"></i> Nombre de Usuario</label>
-                  <input type="text" id="profileUsername" readonly>
-                </div>
-
-                <div class="form-group">
-                  <label for="profileIdNumber"><i class="fa-solid fa-address-card"></i> Identificación / Cédula</label>
-                  <input type="text" id="profileIdNumber" placeholder="Ej. 1-1234-5678">
-                </div>
-
-                <div class="form-group">
-                  <label for="profileEmail"><i class="fa-solid fa-envelope"></i> Correo Electrónico</label>
-                  <input type="email" id="profileEmail" placeholder="correo@ejemplo.com">
-                </div>
-
-                <div class="form-group">
-                  <label for="profilePhone"><i class="fa-solid fa-phone"></i> Teléfono de Contacto</label>
-                  <input type="tel" id="profilePhone" placeholder="Ej. +506 8888-8888">
-                </div>
-              </div>
-
-              <button type="submit" class="btn-primary" style="margin-top: 1rem; width: auto;">
-                <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
-              </button>
-            </form>
+          <div class="avatar-actions">
+            <label for="avatarInput" class="btn-secondary-sm">
+              <i class="fa-solid fa-camera"></i> Cambiar Foto
+            </label>
+            <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+            
+            <button type="button" id="btnDeleteAvatar" class="btn-danger-sm">
+              <i class="fa-solid fa-trash-can"></i> Borrar Foto
+            </button>
           </div>
         </div>
-      </section>
+
+        <form id="profileForm" class="profile-form" novalidate>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="profileFullName"><i class="fa-solid fa-id-card"></i> Nombre Completo *</label>
+              <input type="text" id="profileFullName" required pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$" placeholder="Ej. Ana Martínez">
+              <small class="error-msg" id="errFullName"></small>
+            </div>
+
+            <div class="form-group">
+              <label for="profileUsername"><i class="fa-solid fa-user"></i> Nombre de Usuario</label>
+              <input type="text" id="profileUsername" readonly class="input-disabled">
+            </div>
+
+            <div class="form-group">
+              <label for="profileIdNumber"><i class="fa-solid fa-address-card"></i> Identificación / Cédula *</label>
+              <input type="text" id="profileIdNumber" required placeholder="Ej. 112345678" maxlength="12">
+              <small class="error-msg" id="errIdNumber"></small>
+            </div>
+
+            <div class="form-group">
+              <label for="profileEmail"><i class="fa-solid fa-envelope"></i> Correo Electrónico *</label>
+              <input type="email" id="profileEmail" required placeholder="correo@ejemplo.com">
+              <small class="error-msg" id="errEmail"></small>
+            </div>
+
+            <div class="form-group">
+              <label for="profilePhone"><i class="fa-solid fa-phone"></i> Teléfono de Contacto *</label>
+              <input type="tel" id="profilePhone" required placeholder="Ej. 88888888" maxlength="8">
+              <small class="error-msg" id="errPhone"></small>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary" style="margin-top: 1.5rem; width: auto;">
+            <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
 
     </main>
   </div>
