@@ -99,5 +99,42 @@
 - Rediseñado el formulario de login/registro en `index.html`: ahora centrado en pantalla con tarjeta flotante glassmorphism.
 - Sustituidos todos los emojis del menú y botones por iconos vectoriales profesionales.
 - Actualizados los estilos generales en `css/style.css` para mejorar la responsividad y jerarquía visual.
+-Añadido selector de rol en el formulario de inicio de sesión (Administrador, Docente, Estudiante y Padre de Familia)
+## [1.2.0] - 2026-08-16
 
-Añadido selector de rol en el formulario de inicio de sesión (Administrador, Docente, Estudiante y Padre de Familia)
+### Añadido
+- **Validaciones estrictas en tiempo real**:
+  - Filtro para impedir el ingreso de caracteres no numéricos en los campos de Identificación/Cédula y Teléfono.
+  - Filtro para restringir caracteres especiales y números en el campo de Nombre Completo.
+  - Formato de correo electrónico verificado mediante expresión regular.
+- **Notificaciones Toast personalizadas**:
+  - Reemplazo total de las alertas nativas del navegador (`alert()`) por banners modernos con animaciones alineados a la estética *Glassmorphism*.
+- **Gestión de Foto de Perfil**:
+  - Botón de eliminación de foto de perfil con sustitución automática por un avatar genérico basado en iniciales.
+  - Aviso contextual obligatorio para usuarios con rol **Estudiante** sobre la importancia de mantener una fotografía oficial visible.
+- **Documentación de Memoria de IA**:
+  - Archivo `CLAUDE.md` / `AGENTS.md` estructurado en 7 secciones oficiales para asistentes y agentes de IA.
+
+### Corregido
+- Eliminación de ventanas emergentes nativas del sistema operativo/navegador que rompían el flujo visual de la intranet.
+- Bloqueo de envío del formulario cuando existan campos requeridos vacíos o con formato inválido.
+
+---
+
+## [1.1.0] - 2026-08-15
+
+### Añadido
+- Módulo de configuración de perfil completo con soporte para cargar avatar desde archivo local (`FileReader`).
+- Campos de datos personales extensivos: Correo Electrónico, Teléfono de Contacto e Identificación/Cédula.
+- Rediseño de interfaz con estilo *Glassmorphism / Mica*, tarjetas translúcidas e iconografía de FontAwesome v6.
+
+---
+
+## [1.0.0] - 2026-08-10
+
+### Añadido
+- Estructura base de la Intranet Escolar.
+- Sistema de autenticación simulado con roles: `admin`, `docente`, `estudiante`, `padre`.
+- Vistas personalizadas y menús de navegación dinámicos según el rol del usuario conectado.
+- Persistencia de sesión mediante `localStorage`.
+- Tablón oficial de comunicados.
