@@ -1,59 +1,44 @@
-// Base de datos de prueba predeterminada
-const DEFAULT_USERS = [
-  { username: 'admin', password: '123', role: 'admin', fullName: 'Administrador Principal' },
-  { username: 'admin1', password: '1234', role: 'admin', fullName: 'Dirección Académica' },
-  { username: 'profesor1', password: '123', role: 'docente', fullName: 'Prof. Roberto Gómez' },
-  { username: 'estudiante1', password: '123', role: 'estudiante', fullName: 'Ana Sofía Gómez' }
-];
+document.addEventListener('DOMContentLoaded', () => {
+  const tabLoginBtn = document.getElementById('tabLoginBtn');
+  const tabRegisterBtn = document.getElementById('tabRegisterBtn');
+  const loginForm = document.getElementById('loginForm');
+  const registerForm = document.getElementById('registerForm');
 
-// Inicializar base de usuarios en LocalStorage si no existe
-const getUsersDB = () => {
-  const users = localStorage.getItem('registered_users');
-  if (!users) {
-    localStorage.setItem('registered_users', JSON.stringify(DEFAULT_USERS));
-    return DEFAULT_USERS;
-  }
-  return JSON.parse(users);
-};
-
-export const checkExistingSession = () => {
-  const userSession = JSON.parse(localStorage.getItem('userSession'));
-  if (userSession && userSession.username) {
-    window.location.href = 'dashboard.html';
-  }
-};
-
-export const loginUser = (username, password) => {
-  const users = getUsersDB();
-  const user = users.find(u => u.username.toLowerCase() === username.trim().toLowerCase() && u.password === password);
-
-  if (!user) {
-    return { success: false, message: 'Usuario o contraseña incorrectos.' };
+  // Cambiar a pestaña de Login
+  if (tabLoginBtn) {
+    tabLoginBtn.addEventListener('click', () => {
+      tabLoginBtn.classList.add('active');
+      tabRegisterBtn.classList.remove('active');
+      loginForm.style.display = 'block';
+      registerForm.style.display = 'none';
+    });
   }
 
-  // Guardar datos de sesión activa
-  const sessionData = {
-    username: user.username,
-    role: user.role,
-    fullName: user.fullName || user.username,
-    loggedIn: true,
-    loginTime: new Date().toISOString()
-  };
-
-  localStorage.setItem('userSession', JSON.stringify(sessionData));
-  return { success: true };
-};
-
-export const registerUser = (newUser) => {
-  const users = getUsersDB();
-
-  // Verificar si el usuario ya existe
-  const exists = users.some(u => u.username.toLowerCase() === newUser.username.trim().toLowerCase());
-  if (exists) {
-    return { success: false, message: 'El nombre de usuario ya está registrado.' };
+  // Cambiar a pestaña de Registro
+  if (tabRegisterBtn) {
+    tabRegisterBtn.addEventListener('click', () => {
+      tabRegisterBtn.classList.add('active');
+      tabLoginBtn.classList.remove('active');
+      loginForm.style.display = 'none';
+      registerForm.style.display = 'block';
+    });
   }
 
-  users.push(newUser);
-  localStorage.setItem('registered_users', JSON.stringify(users));
-  return { success: true, message: '¡Cuenta creada con éxito! Ya puedes iniciar sesión.' };
-};
+  // Manejo de inicio de sesión
+  if (loginForm) {
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const username = document.getElementById('loginUsername').value;
+
+      const session = {
+        username: username,
+        fullName: username === 'admin' ? 'Administrador Principal' : username,
+        role: username === 'admin' ? 'admin' : 'estudiante',
+        loggedIn: true
+      };
+
+      localStorage.setItem('userSession', JSON.stringify(session));
+      window.location.href = 'dashboard.html';
+    });
+  }
+});

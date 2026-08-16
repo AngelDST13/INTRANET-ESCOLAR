@@ -4,79 +4,80 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Colegio Eton — Acceso Institucional</title>
+  <!-- Iconos Profesionales (FontAwesome) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="login-body">
+<body class="auth-body">
 
-  <div class="login-container">
-    <div class="login-card glass-card">
-      <div class="login-header">
-        <div class="brand-logo brand-logo--inline">ETON</div>
-        <h2>Colegio Eton</h2>
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="brand-badge">ETON</div>
+        <h1>Colegio Eton</h1>
         <p class="subtitle">Intranet Escolar — Plataforma Académica</p>
       </div>
 
-      <!-- Selector de Pestañas: Login vs Registro -->
+      <!-- Selector de Pestañas -->
       <div class="auth-tabs">
-        <button type="button" id="tabLoginBtn" class="tab-btn active">Iniciar Sesión</button>
-        <button type="button" id="tabRegisterBtn" class="tab-btn">Crear Cuenta</button>
+        <button type="button" class="tab-btn active" id="tabLoginBtn">
+          <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión
+        </button>
+        <button type="button" class="tab-btn" id="tabRegisterBtn">
+          <i class="fa-solid fa-user-plus"></i> Crear Cuenta
+        </button>
       </div>
 
-      <!-- Cuadro de Alertas y Mensajes -->
-      <div id="alertBox" class="alert-box" style="display: none;"></div>
-
-      <!-- FORMULARIO 1: INICIO DE SESIÓN -->
+      <!-- Formulario de Inicio de Sesión -->
       <form id="loginForm" class="auth-form active">
         <div class="form-group">
-          <label for="loginUsername">Usuario</label>
-          <input type="text" id="loginUsername" placeholder="Ej. admin" required autocomplete="username">
+          <label for="loginUsername"><i class="fa-solid fa-user"></i> Nombre de Usuario</label>
+          <input type="text" id="loginUsername" placeholder="Ej. admin" required>
         </div>
 
         <div class="form-group">
-          <label for="loginPassword">Contraseña</label>
-          <input type="password" id="loginPassword" placeholder="••••••••" required autocomplete="current-password">
+          <label for="loginPassword"><i class="fa-solid fa-key"></i> Contraseña</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" required>
         </div>
 
-        <button type="submit" class="btn-action btn-full btn-margin-top">Ingresar al Sistema</button>
+        <button type="submit" class="btn-primary">
+          <i class="fa-solid fa-arrow-right-to-bracket"></i> Ingresar al Sistema
+        </button>
       </form>
 
-      <!-- FORMULARIO 2: REGISTRO DE NUEVO USUARIO -->
+      <!-- Formulario de Registro -->
       <form id="registerForm" class="auth-form" style="display: none;">
         <div class="form-group">
-          <label for="regFullName">Nombre Completo</label>
-          <input type="text" id="regFullName" placeholder="Ej. Ana Daniela Salazar" required>
+          <label for="regFullName"><i class="fa-solid fa-id-card"></i> Nombre Completo</label>
+          <input type="text" id="regFullName" placeholder="Ej. Ana Martínez" required>
         </div>
 
         <div class="form-group">
-          <label for="regEmail">Correo Electrónico</label>
-          <input type="email" id="regEmail" placeholder="correo@eton.edu" required>
+          <label for="regUsername"><i class="fa-solid fa-user"></i> Nombre de Usuario</label>
+          <input type="text" id="regUsername" placeholder="Ej. amartinez" required>
         </div>
 
         <div class="form-group">
-          <label for="regRole">Puesto / Perfil Institucional</label>
+          <label for="regRole"><i class="fa-solid fa-user-shield"></i> Rol Institucional</label>
           <select id="regRole" required>
-            <option value="estudiante">Estudiante / Padre de Familia</option>
+            <option value="estudiante">Estudiante</option>
             <option value="docente">Docente / Profesor</option>
-            <option value="admin">Administración / Dirección</option>
+            <option value="admin">Administrador</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label for="regUsername">Nombre de Usuario</label>
-          <input type="text" id="regUsername" placeholder="Ej. asalazar" required>
+          <label for="regPassword"><i class="fa-solid fa-lock"></i> Contraseña</label>
+          <input type="password" id="regPassword" placeholder="••••••••" required>
         </div>
 
-        <div class="form-group">
-          <label for="regPassword">Contraseña</label>
-          <input type="password" id="regPassword" placeholder="Crea una contraseña" required>
-        </div>
-
-        <button type="submit" class="btn-action btn-full btn-margin-top">Completar Registro</button>
+        <button type="submit" class="btn-primary">
+          <i class="fa-solid fa-check"></i> Registrar Cuenta
+        </button>
       </form>
-
     </div>
   </div>
 
-  <script type="module" src="js/main.js"></script>
+  <script src="js/auth.js"></script>
 </body>
 </html>
