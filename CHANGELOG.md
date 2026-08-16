@@ -22,10 +22,47 @@
 ## [Unreleased] - 2026-08-12
 
 ### Añadido
-- Formulario de registro de estudiantes y encargados con expediente completo (Grado, Sección, Edad, Cumpleaños, Dirección, Encargado, Correo).
+- Formulario de registro para estudiantes y encargados con expediente completo (Grado, Sección, Edad, Cumpleaños, Dirección, Encargado, Correo).
 - Identidad visual e institucional actualizada a **Colegio Eton**.
 - Privacidad estricta para estudiantes: filtrado de calificaciones y asistencia para que solo vean sus propios datos.
 
 ### Corregido
 - Validaciones nativas en campos numéricos (Teléfono, Edad, Notas) para impedir la entrada de letras.
 - Resolución de parpadeo y bucle de redirección en el flujo de inicio/cierre de sesión.
+
+## [Unreleased] - 2026-08-16
+
+### Añadido
+- Rediseño visual completo de la pantalla de inicio de sesión (`index.html`) con estilo Glassmorphism (efecto mica/cristal, desenfoque de fondo y luces de acento)[cite: 1, 11].
+- Cuadro de alerta dinámico (`#alertBox`) para mensajes de error al autenticarse.
+
+### Corregido
+- Solución al fallo de inicio de sesión integrando `main.js` y `auth.js` con ES Modules (`import/export`)[cite: 9, 10].
+- Validaciones completas de campos obligatorios en el formulario de inicio de sesión[cite: 9, 10].
+
+## [Unreleased] - 2026-08-16
+
+### Añadido
+- Pestañas interactivas en `index.html` para alternar fluidamente entre "Iniciar Sesión" y "Crear Cuenta".
+- Formulario de registro institucional solicitando Nombre Completo, Correo, Puesto/Rol, Usuario y Contraseña.
+- Base de usuarios predeterminados para inicio de sesión inmediato (`admin` / `123`, `profesor1` / `123`, `estudiante1` / `123`).
+
+### Corregido
+- Persistencia de usuarios registrados dinámicamente en `localStorage`.
+- Sistema de autenticación con validación de contraseña real.
+
+## [Unreleased] - 2026-08-16
+
+### Añadido
+- Integración completa del maquetado Glassmorphism en `dashboard.html` (`navbar-glass`, `sidebar-glass` y tarjetas dinámicas)[cite: 1, 11].
+- Script de control de dashboard (`js/dashboard.js`) con verificación de sesión activa, cierre de sesión y generación de avatares automáticos.
+- Menú lateral condicional con visibilidad estricta basada en el rol del usuario en sesión (`admin`, `docente`, `estudiante`)[cite: 1, 7].
+
+### Corregido
+- Solución al problema de renderizado sin estilos CSS en el dashboard[cite: 11].
+- Enlace dinámico de datos del perfil del usuario activo en la barra superior y en la pestaña de configuración[cite: 1, 7].
+
+## [Unreleased] - 2026-08-16
+
+### Corregido
+- Corrección de sintaxis en `dashboard.html`: Se envolvió el script JS en la etiqueta `<script type="module">` correspondiente para evitar renderizado de código como texto plano en el navegador.

@@ -3,296 +3,159 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Colegio Eton — Intranet Escolar</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Colegio Eton — Panel Principal</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="dashboard-body">
+<body>
 
+  <!-- Barra de Navegación Superior -->
   <header class="navbar-glass">
     <div class="navbar-brand">
-      <div class="brand-logo">ETON</div>
-      <h2>Colegio Eton</h2>
+      <span class="brand-logo">ETON</span>
+      <h1 class="brand-title">Colegio Eton</h1>
     </div>
+
     <div class="user-profile-summary">
-      <img id="navAvatar" src="https://via.placeholder.com/40" alt="Foto de perfil" class="avatar-small">
+      <img id="userAvatar" src="https://ui-avatars.com/api/?name=Usuario&background=2a9d8f&color=fff" alt="Avatar" class="avatar-small">
       <div class="user-text">
-        <span id="welcomeUser" class="user-name">Usuario</span>
-        <span id="userBadge" class="badge-role">ROL</span>
+        <span id="userName" class="user-name">Cargando...</span>
+        <span id="userRoleBadge" class="badge-role">ROL</span>
       </div>
-      <button id="logoutBtn" class="btn-logout">Cerrar Sesión</button>
+      <button id="btnLogout" class="btn-logout">Cerrar Sesión</button>
     </div>
   </header>
 
+  <!-- Layout Principal con Menú Lateral + Contenido Principal -->
   <div class="dashboard-layout">
     
-    <nav class="sidebar-glass">
-      <ul class="nav-menu">
-        <li>
-          <button class="nav-link active" onclick="showTab('announcementsTab')">📢 Tablón Oficial</button>
-        </li>
-        <li id="menuAdminTeachers" style="display: none;">
-          <button class="nav-link" onclick="showTab('adminTeachersTab')">👨‍🏫 Gestión de Docentes</button>
-        </li>
-        <li id="menuAdminUsers" style="display: none;">
-          <button class="nav-link" onclick="showTab('adminUsersTab')">👥 Registro e Expediente</button>
-        </li>
-        <li id="menuAcademic" style="display: none;">
-          <button class="nav-link" onclick="showTab('academicTab')">📝 Módulo Académico</button>
-        </li>
-        <li id="menuStudent" style="display: none;">
-          <button class="nav-link" onclick="showTab('studentTab')">📊 Mi Expediente</button>
-        </li>
-        <li>
-          <button class="nav-link" onclick="showTab('profileTab')">⚙️ Mi Perfil</button>
-        </li>
-      </ul>
-    </nav>
+    <!-- Barra Lateral de Menú (Filtrada por Rol) -->
+    <aside class="sidebar-glass">
+      <nav>
+        <ul class="nav-menu">
+          <li>
+            <button class="nav-link active" data-tab="tab-announcements" id="announcementsTab">
+              📢 Tablón Oficial
+            </button>
+          </li>
+          <li>
+            <button class="nav-link" data-tab="tab-admin-teachers" id="menuAdminTeachers" style="display: none;">
+              👨‍🏫 Gestión de Docentes
+            </button>
+          </li>
+          <li>
+            <button class="nav-link" data-tab="tab-admin-users" id="menuAdminUsers" style="display: none;">
+              👥 Expedientes y Usuarios
+            </button>
+          </li>
+          <li>
+            <button class="nav-link" data-tab="tab-academic" id="menuAcademic" style="display: none;">
+              📝 Módulo Académico
+            </button>
+          </li>
+          <li>
+            <button class="nav-link" data-tab="tab-student" id="menuStudent" style="display: none;">
+              📊 Mi Expediente
+            </button>
+          </li>
+          <li>
+            <button class="nav-link" data-tab="tab-profile" id="profileTab">
+              ⚙️ Mi Perfil
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </aside>
 
-    <main class="content-area">
-      
-      <!-- Tablón de Comunicados -->
-      <section id="announcementsTab" class="tab-content active">
+    <!-- Área de Contenido Dinámico -->
+    <main class="main-content">
+
+      <!-- Pestaña 1: Tablón Oficial -->
+      <section id="tab-announcements" class="tab-content active">
         <div class="glass-card">
-          <h3>Tablón Oficial de Comunicados — Colegio Eton</h3>
-          <ul id="announcementsList" class="data-list"></ul>
-
-          <form id="addNoticeForm" style="display: none; margin-top: 1.5rem;">
-            <div class="form-group">
-              <input type="text" id="noticeInput" placeholder="Escribe un comunicado o aviso oficial..." required>
-            </div>
-            <button type="submit" class="btn-action">+ Publicar Aviso</button>
-          </form>
-        </div>
-      </section>
-
-      <!-- Gestión de Docentes -->
-      <section id="adminTeachersTab" class="tab-content" style="display: none;">
-        <div class="glass-card">
-          <h3>Gestión de Cuerpo Docente</h3>
+          <h2>📢 Tablón Oficial de Comunicados</h2>
+          <p class="subtitle">Anuncios y avisos institucionales del Colegio Eton</p>
+          <hr class="divider">
           
-          <form id="addTeacherForm" style="margin-top:1rem;">
-            <div class="form-group">
-              <label for="teacherName">Nombre Completo</label>
-              <input type="text" id="teacherName" placeholder="Ej. Prof. Roberto Gómez" required>
-            </div>
-            <div class="form-group">
-              <label for="teacherUser">Usuario de Acceso</label>
-              <input type="text" id="teacherUser" placeholder="Ej. roberto_gomez" required>
-            </div>
-            <div class="form-group">
-              <label for="teacherSubject">Asignatura</label>
-              <input type="text" id="teacherSubject" placeholder="Ej. Ciencias Naturales" required>
-            </div>
-            <button type="submit" class="btn-action">+ Registrar Docente</button>
-          </form>
-
-          <h4 style="margin-top: 1.5rem;">Docentes Registrados</h4>
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Docente</th>
-                <th>Usuario</th>
-                <th>Asignatura</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody id="teachersTableBody"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- Control General y Registro Estudiantes / Padres (Parámetros Extendidos) -->
-      <section id="adminUsersTab" class="tab-content" style="display: none;">
-        <div class="glass-card">
-          <h3>Registro de Estudiantes y Encargados</h3>
-          <p class="subtitle">Ingreso de nuevos expedientes con datos académicos y personales institucionales.</p>
-
-          <form id="registerStudentForm" style="margin-top:1rem;">
-            <div class="grid-2col">
-              <div class="form-group">
-                <label for="regFullName">Nombre Completo del Estudiante</label>
-                <input type="text" id="regFullName" placeholder="Ej. Ana Sofía Gómez" required>
-              </div>
-              <div class="form-group">
-                <label for="regUsername">Usuario de Acceso</label>
-                <input type="text" id="regUsername" placeholder="Ej. agomez" required>
-              </div>
-              <div class="form-group">
-                <label for="regEmail">Correo Electrónico Institucional</label>
-                <input type="email" id="regEmail" placeholder="estudiante@eton.edu" required>
-              </div>
-              <div class="form-group">
-                <label for="regPhone">Teléfono de Contacto (Solo Números)</label>
-                <input type="tel" id="regPhone" placeholder="88888888" pattern="[0-9]+" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
-              </div>
-              <div class="form-group">
-                <label for="regGrade">Año / Grado que cursa</label>
-                <select id="regGrade" required>
-                  <option value="7° Año">7° Año</option>
-                  <option value="8° Año">8° Año</option>
-                  <option value="9° Año">9° Año</option>
-                  <option value="10° Año">10° Año</option>
-                  <option value="11° Año">11° Año</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="regSection">Sección / Grupo</label>
-                <input type="text" id="regSection" placeholder="Ej. 10-1" required>
-              </div>
-              <div class="form-group">
-                <label for="regAge">Edad (Años)</label>
-                <input type="number" id="regAge" min="3" max="25" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
-              </div>
-              <div class="form-group">
-                <label for="regBirthdate">Fecha de Nacimiento</label>
-                <input type="date" id="regBirthdate" required>
-              </div>
-              <div class="form-group">
-                <label for="regGuardian">Nombre del Encargado / Padre de Familia</label>
-                <input type="text" id="regGuardian" placeholder="Ej. Carlos Gómez" required>
-              </div>
-              <div class="form-group">
-                <label for="regAddress">Dirección de Residencia</label>
-                <input type="text" id="regAddress" placeholder="Dirección exacta" required>
-              </div>
-            </div>
-            <button type="submit" class="btn-action" style="margin-top: 1rem;">+ Registrar Expediente de Estudiante</button>
-          </form>
-
-          <h4 style="margin-top: 2rem;">Usuarios y Estudiantes Registrados</h4>
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Usuario</th>
-                <th>Nombre</th>
-                <th>Grado / Sección</th>
-                <th>Rol</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody id="usersTableBody"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- Módulo Académico -->
-      <section id="academicTab" class="tab-content" style="display: none;">
-        <div class="glass-card">
-          <h3>Módulo Académico — Calificaciones y Asistencia</h3>
-          
-          <div class="grid-2col" style="margin-top:1rem;">
-            <form id="addGradeForm">
-              <h4>Registrar Calificación</h4>
-              <div class="form-group">
-                <label for="studentName">Usuario del Estudiante</label>
-                <input type="text" id="studentName" placeholder="Ej. agomez" required>
-              </div>
-              <div class="form-group">
-                <label for="subjectName">Asignatura</label>
-                <input type="text" id="subjectName" placeholder="Materia" required>
-              </div>
-              <div class="form-group">
-                <label for="gradeScore">Nota (0 - 100)</label>
-                <input type="number" id="gradeScore" min="0" max="100" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
-              </div>
-              <button type="submit" class="btn-action">Guardar Nota</button>
-            </form>
-
-            <form id="attendanceForm">
-              <h4>Control de Asistencia</h4>
-              <div class="form-group">
-                <label for="attendanceStudent">Usuario del Estudiante</label>
-                <input type="text" id="attendanceStudent" placeholder="Ej. agomez" required>
-              </div>
-              <div class="form-group">
-                <label for="attendanceStatus">Estado</label>
-                <select id="attendanceStatus" required>
-                  <option value="Presente">Presente</option>
-                  <option value="Ausente">Ausente</option>
-                  <option value="Justificado">Justificado</option>
-                </select>
-              </div>
-              <button type="submit" class="btn-action">Guardar Asistencia</button>
-            </form>
+          <div class="announcement-list">
+            <article class="announcement-item">
+              <h3>Bienvenidos al Ciclo Lectivo — Colegio Eton</h3>
+              <p class="announcement-meta">Publicado por Dirección General • Hoy</p>
+              <p>Les damos la más cordial bienvenida a nuestra Intranet Escolar. A través de este portal podrán consultar expedientes, calificaciones y anuncios oficiales.</p>
+            </article>
           </div>
         </div>
       </section>
 
-      <!-- Consulta Estudiantes (Privada: Solo información propia) -->
-      <section id="studentTab" class="tab-content" style="display: none;">
+      <!-- Pestaña 2: Gestión de Docentes (Solo Admin) -->
+      <section id="tab-admin-teachers" class="tab-content" style="display: none;">
         <div class="glass-card">
-          <h3>Expediente Académico del Estudiante</h3>
-          
-          <!-- Ficha Académica del Estudiante -->
-          <div id="studentDetailCard" class="glass-card" style="margin-bottom: 1.5rem; background: rgba(255,255,255,0.7);">
-            <h4>Ficha Personal y Académica</h4>
-            <div id="studentInfoContainer" class="grid-2col" style="margin-top: 0.5rem;"></div>
-          </div>
-
-          <h4>Mis Calificaciones</h4>
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Asignatura</th>
-                <th>Nota</th>
-                <th>Estado</th>
-              </tr>
-            </thead>
-            <tbody id="studentGradesBody"></tbody>
-          </table>
-
-          <h4 style="margin-top: 1.5rem;">Mi Registro de Asistencia</h4>
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Materia / Registro</th>
-                <th>Estado</th>
-              </tr>
-            </thead>
-            <tbody id="studentAttendanceBody"></tbody>
-          </table>
+          <h2>👨‍🏫 Gestión del Cuerpo Docente</h2>
+          <p class="subtitle">Administración de profesores y asignación de materias</p>
+          <hr class="divider">
+          <p>Módulo de registro e inspección de docentes habilitado para administración.</p>
         </div>
       </section>
 
-      <!-- Mi Perfil con Validaciones Estrictas -->
-      <section id="profileTab" class="tab-content" style="display: none;">
+      <!-- Pestaña 3: Expedientes y Usuarios (Solo Admin) -->
+      <section id="tab-admin-users" class="tab-content" style="display: none;">
         <div class="glass-card">
-          <h3>Personalización del Perfil</h3>
-          <form id="profileForm" class="profile-container">
+          <h2>👥 Gestión de Expedientes e Inscripciones</h2>
+          <p class="subtitle">Alta y mantenimiento de estudiantes y encargados</p>
+          <hr class="divider">
+          <p>Administración de expedientes de la comunidad educativa.</p>
+        </div>
+      </section>
+
+      <!-- Pestaña 4: Módulo Académico (Admin + Docente) -->
+      <section id="tab-academic" class="tab-content" style="display: none;">
+        <div class="glass-card">
+          <h2>📝 Módulo Académico</h2>
+          <p class="subtitle">Ingreso de calificaciones y control de asistencia</p>
+          <hr class="divider">
+          <p>Gestión del libro de notas y registro de asistencia diaria.</p>
+        </div>
+      </section>
+
+      <!-- Pestaña 5: Mi Expediente (Solo Estudiantes / Padres) -->
+      <section id="tab-student" class="tab-content" style="display: none;">
+        <div class="glass-card">
+          <h2>📊 Mi Expediente Académico</h2>
+          <p class="subtitle">Consulta de notas, asistencia e historial personal</p>
+          <hr class="divider">
+          <p>Información privada y confidencial del estudiante.</p>
+        </div>
+      </section>
+
+      <!-- Pestaña 6: Mi Perfil -->
+      <section id="tab-profile" class="tab-content" style="display: none;">
+        <div class="glass-card">
+          <h2>⚙️ Configuración de Mi Perfil</h2>
+          <p class="subtitle">Actualiza tu información institucional</p>
+          <hr class="divider">
+          
+          <div class="profile-container">
             <div class="avatar-upload-section">
-              <img id="profilePreview" src="https://via.placeholder.com/120" alt="Vista previa avatar" class="avatar-large">
-              <div class="form-group" style="width:100%;">
-                <label for="photoUrl">URL Foto Perfil</label>
-                <input type="url" id="photoUrl" placeholder="https://ejemplo.com/foto.jpg">
-              </div>
+              <img id="profileLargeAvatar" src="https://ui-avatars.com/api/?name=Usuario&background=2a9d8f&color=fff" alt="Perfil" class="avatar-large">
+              <span class="badge-role" id="profileRoleBadge">ROL</span>
             </div>
 
-            <div class="profile-details">
+            <form id="profileForm">
               <div class="form-group">
                 <label for="profileFullName">Nombre Completo</label>
-                <input type="text" id="profileFullName" placeholder="Tu nombre real" required>
+                <input type="text" id="profileFullName" readonly>
               </div>
               <div class="form-group">
-                <label for="profileEmail">Correo Electrónico</label>
-                <input type="email" id="profileEmail" placeholder="correo@eton.edu" required>
+                <label for="profileUsername">Nombre de Usuario</label>
+                <input type="text" id="profileUsername" readonly>
               </div>
-              <div class="form-group">
-                <label for="profilePhone">Teléfono de Contacto (Solo Números)</label>
-                <input type="tel" id="profilePhone" placeholder="88888888" pattern="[0-9]+" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
-              </div>
-              <div class="form-group">
-                <label for="profileBio">Información / Biografía</label>
-                <textarea id="profileBio" rows="3" placeholder="Información del usuario..."></textarea>
-              </div>
-              <button type="submit" class="btn-action">Actualizar Mi Perfil</button>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </section>
 
     </main>
   </div>
 
-  <script src="dashboard.js"></script>
+  <script type="module" src="js/dashboard.js"></script>
 </body>
 </html>

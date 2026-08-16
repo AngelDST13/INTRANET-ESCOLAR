@@ -3,42 +3,80 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Intranet Escolar — Iniciar Sesión</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Colegio Eton — Acceso Institucional</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="login-body">
 
-  <div class="login-card glass-card">
-    <div class="login-header">
-      <div class="brand-logo brand-logo--inline">IE</div>
-      <h2>Intranet Escolar</h2>
-      <p class="subtitle">Ingresa tus credenciales para acceder</p>
+  <div class="login-container">
+    <div class="login-card glass-card">
+      <div class="login-header">
+        <div class="brand-logo brand-logo--inline">ETON</div>
+        <h2>Colegio Eton</h2>
+        <p class="subtitle">Intranet Escolar — Plataforma Académica</p>
+      </div>
+
+      <!-- Selector de Pestañas: Login vs Registro -->
+      <div class="auth-tabs">
+        <button type="button" id="tabLoginBtn" class="tab-btn active">Iniciar Sesión</button>
+        <button type="button" id="tabRegisterBtn" class="tab-btn">Crear Cuenta</button>
+      </div>
+
+      <!-- Cuadro de Alertas y Mensajes -->
+      <div id="alertBox" class="alert-box" style="display: none;"></div>
+
+      <!-- FORMULARIO 1: INICIO DE SESIÓN -->
+      <form id="loginForm" class="auth-form active">
+        <div class="form-group">
+          <label for="loginUsername">Usuario</label>
+          <input type="text" id="loginUsername" placeholder="Ej. admin" required autocomplete="username">
+        </div>
+
+        <div class="form-group">
+          <label for="loginPassword">Contraseña</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" required autocomplete="current-password">
+        </div>
+
+        <button type="submit" class="btn-action btn-full btn-margin-top">Ingresar al Sistema</button>
+      </form>
+
+      <!-- FORMULARIO 2: REGISTRO DE NUEVO USUARIO -->
+      <form id="registerForm" class="auth-form" style="display: none;">
+        <div class="form-group">
+          <label for="regFullName">Nombre Completo</label>
+          <input type="text" id="regFullName" placeholder="Ej. Ana Daniela Salazar" required>
+        </div>
+
+        <div class="form-group">
+          <label for="regEmail">Correo Electrónico</label>
+          <input type="email" id="regEmail" placeholder="correo@eton.edu" required>
+        </div>
+
+        <div class="form-group">
+          <label for="regRole">Puesto / Perfil Institucional</label>
+          <select id="regRole" required>
+            <option value="estudiante">Estudiante / Padre de Familia</option>
+            <option value="docente">Docente / Profesor</option>
+            <option value="admin">Administración / Dirección</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="regUsername">Nombre de Usuario</label>
+          <input type="text" id="regUsername" placeholder="Ej. asalazar" required>
+        </div>
+
+        <div class="form-group">
+          <label for="regPassword">Contraseña</label>
+          <input type="password" id="regPassword" placeholder="Crea una contraseña" required>
+        </div>
+
+        <button type="submit" class="btn-action btn-full btn-margin-top">Completar Registro</button>
+      </form>
+
     </div>
-
-    <form id="loginForm" class="login-form">
-      <div class="form-group">
-        <label for="username">Usuario</label>
-        <input type="text" id="username" placeholder="Ej. Joshi, admin, prof_mario" required autocomplete="username">
-      </div>
-
-      <div class="form-group">
-        <label for="password">Contraseña</label>
-        <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
-      </div>
-
-      <div class="form-group">
-        <label for="role">Tipo de Usuario</label>
-        <select id="role" required>
-          <option value="admin">Administrador / Dirección</option>
-          <option value="docente" selected>Docente / Profesor</option>
-          <option value="estudiante">Estudiante / Padre de Familia</option>
-        </select>
-      </div>
-
-      <button type="submit" class="btn-action btn-full btn-margin-top">Iniciar Sesión</button>
-    </form>
   </div>
 
-  <script src="auth.js"></script>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
