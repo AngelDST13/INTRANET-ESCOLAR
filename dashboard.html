@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Colegio Eton — Panel Principal</title>
-  <!-- Iconos Profesionales (FontAwesome) -->
+  <!-- Iconos FontAwesome v6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -18,7 +18,7 @@
     </div>
 
     <div class="user-profile-summary">
-      <img id="userAvatar" src="https://ui-avatars.com/api/?name=Admin&background=2a9d8f&color=fff" alt="Avatar" class="avatar-small">
+      <img id="userAvatar" src="https://ui-avatars.com/api/?name=Usuario&background=2a9d8f&color=fff" alt="Foto de Perfil del Usuario" class="avatar-small">
       <div class="user-text">
         <span id="userName" class="user-name">Cargando...</span>
         <span id="userRoleBadge" class="badge-role">ROL</span>
@@ -104,7 +104,7 @@
       <section id="tab-admin-users" class="tab-content" style="display: none;">
         <div class="glass-card">
           <h2><i class="fa-solid fa-users-gear text-teal"></i> Gestión de Expedientes e Inscripciones</h2>
-          <p class="subtitle">Alta y mantenimiento de estudiantes y encargados</p>
+          <p class="subtitle">Alta, baja y edición de estudiantes y encargados</p>
           <hr class="divider">
           <p>Administración de expedientes de la comunidad educativa.</p>
         </div>
@@ -120,7 +120,7 @@
         </div>
       </section>
 
-      <!-- Pestaña 5: Mi Expediente (Estudiante) -->
+      <!-- Pestaña 5: Mi Expediente (Estudiante / Padre) -->
       <section id="tab-student" class="tab-content" style="display: none;">
         <div class="glass-card">
           <h2><i class="fa-solid fa-graduation-cap text-teal"></i> Mi Expediente Académico</h2>
@@ -130,28 +130,56 @@
         </div>
       </section>
 
-      <!-- Pestaña 6: Configuración de Perfil -->
+      <!-- Pestaña 6: Configuración de Perfil Completa -->
       <section id="tab-profile" class="tab-content" style="display: none;">
         <div class="glass-card">
           <h2><i class="fa-solid fa-sliders text-teal"></i> Configuración de Mi Perfil</h2>
-          <p class="subtitle">Actualiza tu información institucional</p>
+          <p class="subtitle">Actualiza tus datos de contacto e identificación personal</p>
           <hr class="divider">
           
           <div class="profile-container">
             <div class="avatar-upload-section">
-              <img id="profileLargeAvatar" src="https://ui-avatars.com/api/?name=Admin&background=2a9d8f&color=fff" alt="Perfil" class="avatar-large">
-              <span class="badge-role" id="profileRoleBadge">ADMIN</span>
+              <img id="profileLargeAvatar" src="https://ui-avatars.com/api/?name=Usuario&background=2a9d8f&color=fff" alt="Avatar Ampliado del Usuario" class="avatar-large">
+              <span class="badge-role" id="profileRoleBadge">ROL</span>
+              
+              <!-- Cambiar Foto de Perfil -->
+              <label for="avatarInput" class="btn-secondary-sm">
+                <i class="fa-solid fa-camera"></i> Cambiar Foto
+              </label>
+              <input type="file" id="avatarInput" accept="image/*" style="display: none;">
             </div>
 
             <form id="profileForm" class="profile-form">
-              <div class="form-group">
-                <label for="profileFullName"><i class="fa-solid fa-id-card"></i> Nombre Completo</label>
-                <input type="text" id="profileFullName" readonly>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="profileFullName"><i class="fa-solid fa-id-card"></i> Nombre Completo</label>
+                  <input type="text" id="profileFullName" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="profileUsername"><i class="fa-solid fa-user"></i> Nombre de Usuario</label>
+                  <input type="text" id="profileUsername" readonly>
+                </div>
+
+                <div class="form-group">
+                  <label for="profileIdNumber"><i class="fa-solid fa-address-card"></i> Identificación / Cédula</label>
+                  <input type="text" id="profileIdNumber" placeholder="Ej. 1-1234-5678">
+                </div>
+
+                <div class="form-group">
+                  <label for="profileEmail"><i class="fa-solid fa-envelope"></i> Correo Electrónico</label>
+                  <input type="email" id="profileEmail" placeholder="correo@ejemplo.com">
+                </div>
+
+                <div class="form-group">
+                  <label for="profilePhone"><i class="fa-solid fa-phone"></i> Teléfono de Contacto</label>
+                  <input type="tel" id="profilePhone" placeholder="Ej. +506 8888-8888">
+                </div>
               </div>
-              <div class="form-group">
-                <label for="profileUsername"><i class="fa-solid fa-user"></i> Nombre de Usuario</label>
-                <input type="text" id="profileUsername" readonly>
-              </div>
+
+              <button type="submit" class="btn-primary" style="margin-top: 1rem; width: auto;">
+                <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
+              </button>
             </form>
           </div>
         </div>

@@ -391,3 +391,30 @@ input:focus, select:focus {
   object-fit: cover;
   border: 4px solid var(--accent-teal);
 }
+
+/* --- ESTILOS ADICIONALES PARA FORMULARIO DE PERFIL Y AVATAR --- */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+.btn-secondary-sm {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--accent-teal);
+  color: var(--accent-teal);
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btn-secondary-sm:hover {
+  background: var(--accent-teal);
+  color: white;
+}
