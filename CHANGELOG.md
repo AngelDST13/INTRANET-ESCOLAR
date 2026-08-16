@@ -66,3 +66,23 @@
 
 ### Corregido
 - Corrección de sintaxis en `dashboard.html`: Se envolvió el script JS en la etiqueta `<script type="module">` correspondiente para evitar renderizado de código como texto plano en el navegador.
+
+## [Unreleased] - 2026-08-16
+
+### Añadido
+- Interfaz renovada con diseño Glassmorphism para `index.html` y `dashboard.html`[cite: 1, 11].
+- Pestañas interactivas de Inicio de Sesión y Registro con campos institucionales completos.
+- Base de usuarios de prueba predeterminados (`admin` / `123`).
+
+### Corregido
+- Solución al error de sintaxis en `dashboard.html` encapsulando la lógica JS en `<script type="module">`.
+- Control de sesión activo y cierre de sesión con redirección automática[cite: 9].
+
+### Gestión del Proyecto
+- Sincronización y publicación de la versión actualizada en el repositorio de GitHub.
+
+## [Unreleased] - 2026-08-16
+
+### Corregido
+- Solución al error de carga de CSS en el Navbar y la Barra Lateral de `dashboard.html`[cite: 11].
+- Reestructuración de script `js/dashboard.js` para asegurar la carga inmediata de avatares, nombres de usuario y roles dinámicos[cite: 1, 7].

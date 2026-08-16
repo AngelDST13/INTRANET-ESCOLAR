@@ -6,29 +6,29 @@
   <title>Colegio Eton — Panel Principal</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="dashboard-body">
 
-  <!-- Barra de Navegación Superior -->
+  <!-- Navbar Superior Institucional -->
   <header class="navbar-glass">
     <div class="navbar-brand">
-      <span class="brand-logo">ETON</span>
-      <h1 class="brand-title">Colegio Eton</h1>
+      <div class="brand-logo">ETON</div>
+      <span class="brand-title">Colegio Eton</span>
     </div>
 
     <div class="user-profile-summary">
       <img id="userAvatar" src="https://ui-avatars.com/api/?name=Usuario&background=2a9d8f&color=fff" alt="Avatar" class="avatar-small">
       <div class="user-text">
-        <span id="userName" class="user-name">Cargando...</span>
+        <span id="userName" class="user-name">Usuario</span>
         <span id="userRoleBadge" class="badge-role">ROL</span>
       </div>
       <button id="btnLogout" class="btn-logout">Cerrar Sesión</button>
     </div>
   </header>
 
-  <!-- Layout Principal con Menú Lateral + Contenido Principal -->
+  <!-- Layout Principal -->
   <div class="dashboard-layout">
     
-    <!-- Barra Lateral de Menú (Filtrada por Rol) -->
+    <!-- Barra Lateral de Menú -->
     <aside class="sidebar-glass">
       <nav>
         <ul class="nav-menu">
@@ -66,7 +66,7 @@
       </nav>
     </aside>
 
-    <!-- Área de Contenido Dinámico -->
+    <!-- Área de Contenido -->
     <main class="main-content">
 
       <!-- Pestaña 1: Tablón Oficial -->
@@ -86,7 +86,7 @@
         </div>
       </section>
 
-      <!-- Pestaña 2: Gestión de Docentes (Solo Admin) -->
+      <!-- Pestaña 2: Gestión de Docentes -->
       <section id="tab-admin-teachers" class="tab-content" style="display: none;">
         <div class="glass-card">
           <h2>👨‍🏫 Gestión del Cuerpo Docente</h2>
@@ -96,7 +96,7 @@
         </div>
       </section>
 
-      <!-- Pestaña 3: Expedientes y Usuarios (Solo Admin) -->
+      <!-- Pestaña 3: Expedientes y Usuarios -->
       <section id="tab-admin-users" class="tab-content" style="display: none;">
         <div class="glass-card">
           <h2>👥 Gestión de Expedientes e Inscripciones</h2>
@@ -106,7 +106,7 @@
         </div>
       </section>
 
-      <!-- Pestaña 4: Módulo Académico (Admin + Docente) -->
+      <!-- Pestaña 4: Módulo Académico -->
       <section id="tab-academic" class="tab-content" style="display: none;">
         <div class="glass-card">
           <h2>📝 Módulo Académico</h2>
@@ -116,7 +116,7 @@
         </div>
       </section>
 
-      <!-- Pestaña 5: Mi Expediente (Solo Estudiantes / Padres) -->
+      <!-- Pestaña 5: Mi Expediente -->
       <section id="tab-student" class="tab-content" style="display: none;">
         <div class="glass-card">
           <h2>📊 Mi Expediente Académico</h2>
@@ -139,7 +139,7 @@
               <span class="badge-role" id="profileRoleBadge">ROL</span>
             </div>
 
-            <form id="profileForm">
+            <form id="profileForm" class="profile-form">
               <div class="form-group">
                 <label for="profileFullName">Nombre Completo</label>
                 <input type="text" id="profileFullName" readonly>
@@ -156,6 +156,6 @@
     </main>
   </div>
 
-  <script type="module" src="js/dashboard.js"></script>
+  <script src="js/dashboard.js"></script>
 </body>
 </html>
