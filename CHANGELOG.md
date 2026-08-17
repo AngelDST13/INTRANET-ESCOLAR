@@ -150,3 +150,14 @@
 - Unificación del listener `DOMContentLoaded` en `js/dashboard.js` para eliminar conflictos de eventos duplicados.
 - Reparación del toggle de modo noche/día para sincronizarse globalmente mediante `localStorage`.
 - Corrección del contenedor de avatar superior (`#userAvatar`) para proyectar imágenes en lugar de texto estático.
+
+
+## [1.2.0] - 2026-08-16
+
+### Añadido
+- Control de acceso basado en roles (RBAC) para ADMIN, DOCENTE y TUTOR.
+- Vista aislada en el Módulo Académico para el perfil **TUTOR** (restricción para visualizar únicamente el expediente de su representado/hijo).
+
+### Cambios & Ajustes
+- Ocultamiento dinámico de secciones sensibles (Gestión de Usuarios) en la barra de navegación lateral para usuarios sin privilegios administrativos.
+- Deshabilitación de exportaciones masivas e ingreso de notas para el rol TUTOR.

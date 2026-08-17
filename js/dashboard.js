@@ -353,34 +353,119 @@ document.addEventListener('DOMContentLoaded', () => {
     updateAcademicStats();
   }
 
-  function updateAcademicStats() {
+  function updateAcademicStats(dataSet = studentsData) {
     const totalEl = document.getElementById('statTotalStudents');
     const avgEl = document.getElementById('statAverage');
     const topEl = document.getElementById('statTopStudent');
 
-    if (studentsData.length === 0) return;
+    if (!dataSet || dataSet.length === 0) {
+      if (totalEl) totalEl.textContent = '0';
+      if (avgEl) avgEl.textContent = '0 pts';
+      if (topEl) topEl.textContent = 'Sin datos';
+      return;
+    }
 
-    if (totalEl) totalEl.textContent = studentsData.length;
+    if (totalEl) totalEl.textContent = dataSet.length;
 
-    const globalAvg = Math.round(studentsData.reduce((acc, curr) => acc + calculateAverage(curr), 0) / studentsData.length);
+    const globalAvg = Math.round(dataSet.reduce((acc, curr) => acc + calculateAverage(curr), 0) / dataSet.length);
     if (avgEl) avgEl.textContent = `${globalAvg} pts`;
 
-    const sorted = [...studentsData].sort((a, b) => calculateAverage(b) - calculateAverage(a));
+    const sorted = [...dataSet].sort((a, b) => calculateAverage(b) - calculateAverage(a));
     const topStudent = sorted[0];
     if (topEl) topEl.textContent = `${topStudent.name} (${calculateAverage(topStudent)} pts)`;
   }
 
-  renderStudentsTable();
+  const activeUser = JSON.parse(localStorage.getItem('userSession')) || {
+    name: 'Angel Salazar',
+    role: 'ADMIN',
+    childId: '118230491'
+  };
+
+  function applyRolePermissions() {
+    const role = activeUser.role ? activeUser.role.toUpperCase() : 'ESTUDIANTE';
+
+    const userRoleBadge = document.getElementById('userRoleBadge');
+    if (userRoleBadge) userRoleBadge.textContent = role;
+
+    const navUsers = document.querySelector('[data-section="usuarios"]');
+    const navResources = document.querySelector('[data-section="recursos"]');
+
+    if (role === 'TUTOR' || role === 'ESTUDIANTE') {
+      if (navUsers) navUsers.style.display = 'none';
+      if (navResources) navResources.style.display = 'none';
+
+      const adminActions = document.querySelectorAll('.admin-only');
+      adminActions.forEach(el => el.style.display = 'none');
+    } else {
+      if (navUsers) navUsers.style.display = 'flex';
+      if (navResources) navResources.style.display = 'flex';
+    }
+  }
+
+  function renderStudentsTableWithPermissions(filterText = '', filterGrade = 'all') {
+    const tbody = document.getElementById('studentsTableBody');
+    if (!tbody) return;
+
+    const role = activeUser.role ? activeUser.role.toUpperCase() : 'ESTUDIANTE';
+
+    let visibleStudents = studentsData;
+    if (role === 'TUTOR') {
+      visibleStudents = studentsData.filter(s => s.id === activeUser.childId);
+    } else {
+      visibleStudents = studentsData.filter(s => {
+        const matchText = s.name.toLowerCase().includes(filterText.toLowerCase()) || s.id.includes(filterText);
+        const matchGrade = filterGrade === 'all' || s.grade === filterGrade;
+        return matchText && matchGrade;
+      });
+    }
+
+    if (visibleStudents.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px; color: var(--text-muted);">No se encontraron registros académicos autorizados.</td></tr>';
+      updateAcademicStats([]);
+      return;
+    }
+
+    tbody.innerHTML = visibleStudents.map(s => {
+      const avg = calculateAverage(s);
+      const badgeColor = avg >= 90 ? '#10b981' : (avg >= 70 ? '#f59e0b' : '#ef4444');
+
+      return `
+        <tr style="border-bottom: 1px solid var(--border-color, #334155);">
+          <td style="padding: 12px; font-weight: 500;">${s.name}</td>
+          <td style="padding: 12px;">${s.id}</td>
+          <td style="padding: 12px;">${s.grade}° Año</td>
+          <td style="padding: 12px;">${s.math}</td>
+          <td style="padding: 12px;">${s.spanish}</td>
+          <td style="padding: 12px;">${s.english}</td>
+          <td style="padding: 12px;">
+            <span style="background: ${badgeColor}; color: white; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 0.8rem;">
+              ${avg} pts
+            </span>
+          </td>
+          <td style="padding: 12px;">
+            <button onclick="downloadSinglePDF('${s.id}')" class="btn-primary" style="padding: 5px 10px; font-size: 0.8rem; background: #ef4444;" title="Descargar Boleta PDF">
+              <i class="fa-solid fa-file-pdf"></i> Reporte PDF
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    updateAcademicStats(visibleStudents);
+  }
+
+  applyRolePermissions();
+  renderStudentsTableWithPermissions();
 
   const searchInput = document.getElementById('searchStudent');
   const gradeSelect = document.getElementById('filterGrade');
 
   if (searchInput) {
-    searchInput.addEventListener('input', () => renderStudentsTable(searchInput.value, gradeSelect ? gradeSelect.value : 'all'));
+    searchInput.addEventListener('input', () => renderStudentsTableWithPermissions(searchInput.value, gradeSelect ? gradeSelect.value : 'all'));
   }
 
   if (gradeSelect) {
-    gradeSelect.addEventListener('change', () => renderStudentsTable(searchInput ? searchInput.value : '', gradeSelect.value));
+    gradeSelect.addEventListener('change', () => renderStudentsTableWithPermissions(searchInput ? searchInput.value : '', gradeSelect.value));
   }
 
   const btnExportJSON = document.getElementById('btnExportJSON');
