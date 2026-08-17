@@ -138,3 +138,15 @@
 - Vistas personalizadas y menús de navegación dinámicos según el rol del usuario conectado.
 - Persistencia de sesión mediante `localStorage`.
 - Tablón oficial de comunicados.
+
+## [1.1.0] - 2026-08-16
+
+### Añadido
+- Formulario de edición de perfil dinámico en `dashboard.html`.
+- Sistema de notificaciones *Toast* flotantes para confirmar acciones guardadas.
+- Persistencia de comunicados con soporte para imágenes adjuntas en `localStorage`.
+
+### Corregido
+- Unificación del listener `DOMContentLoaded` en `js/dashboard.js` para eliminar conflictos de eventos duplicados.
+- Reparación del toggle de modo noche/día para sincronizarse globalmente mediante `localStorage`.
+- Corrección del contenedor de avatar superior (`#userAvatar`) para proyectar imágenes en lugar de texto estático.

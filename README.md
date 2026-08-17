@@ -43,3 +43,9 @@ INTRANET-ESCOLAR/
 ├── dashboard.html         # Panel de control principal
 ├── index.html             # Pantalla de inicio de sesión y registro
 └── README.md              # Documentación general del repositorio
+
+## 🚀 Características
+- **Autenticación y Control de Sesión:** Manejo de roles (Admin, Docente, Estudiante) guardados en `localStorage`.
+- **Perfil de Usuario:** Actualización en tiempo real de datos personales y fotografía (soporte Base64/Avatar).
+- **Tablón Oficial:** Publicación de comunicados persistentes con adjuntos multimedia.
+- **Tema Personalizado:** Modo noche/día con persistencia automática de preferencia.
