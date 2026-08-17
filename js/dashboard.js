@@ -303,4 +303,194 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // ==========================================
+  // 10. MÓDULO ACADÉMICO: TABLA DINÁMICA, EXPORTACIÓN E IMPORTACIÓN
+  // ==========================================
+
+  const defaultStudents = [
+    { id: '118230491', name: 'Valeria Morales', grade: '11', math: 98, spanish: 95, english: 100 },
+    { id: '209380122', name: 'Carlos Alvarado', grade: '10', math: 85, spanish: 88, english: 90 },
+    { id: '119300482', name: 'Lucía Fernández', grade: '11', math: 92, spanish: 90, english: 94 },
+    { id: '308220193', name: 'Diego Sanabria', grade: '10', math: 78, spanish: 82, english: 80 }
+  ];
+
+  let studentsData = JSON.parse(localStorage.getItem('studentsData')) || defaultStudents;
+
+  function calculateAverage(s) {
+    return Math.round((s.math + s.spanish + s.english) / 3);
+  }
+
+  function renderStudentsTable(filterText = '', filterGrade = 'all') {
+    const tbody = document.getElementById('studentsTableBody');
+    if (!tbody) return;
+
+    const filtered = studentsData.filter(s => {
+      const matchText = s.name.toLowerCase().includes(filterText.toLowerCase()) || s.id.includes(filterText);
+      const matchGrade = filterGrade === 'all' || s.grade === filterGrade;
+      return matchText && matchGrade;
+    });
+
+    tbody.innerHTML = filtered.map(s => {
+      const avg = calculateAverage(s);
+      const badgeColor = avg >= 90 ? '#10b981' : (avg >= 70 ? '#f59e0b' : '#ef4444');
+
+      return `
+        <tr style="border-bottom: 1px solid var(--border-color, #334155);">
+          <td style="padding: 12px; font-weight: 500;">${s.name}</td>
+          <td style="padding: 12px;">${s.id}</td>
+          <td style="padding: 12px;">${s.grade}° Año</td>
+          <td style="padding: 12px;">${s.math}</td>
+          <td style="padding: 12px;">${s.spanish}</td>
+          <td style="padding: 12px;">${s.english}</td>
+          <td style="padding: 12px;"><span style="background: ${badgeColor}; color: white; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 0.8rem;">${avg} pts</span></td>
+          <td style="padding: 12px;">
+            <button onclick="downloadSinglePDF('${s.id}')" style="background: transparent; border: none; color: #ef4444; cursor: pointer;" title="Descargar Boleta PDF"><i class="fa-solid fa-file-pdf"></i></button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    updateAcademicStats();
+  }
+
+  function updateAcademicStats() {
+    const totalEl = document.getElementById('statTotalStudents');
+    const avgEl = document.getElementById('statAverage');
+    const topEl = document.getElementById('statTopStudent');
+
+    if (studentsData.length === 0) return;
+
+    if (totalEl) totalEl.textContent = studentsData.length;
+
+    const globalAvg = Math.round(studentsData.reduce((acc, curr) => acc + calculateAverage(curr), 0) / studentsData.length);
+    if (avgEl) avgEl.textContent = `${globalAvg} pts`;
+
+    const sorted = [...studentsData].sort((a, b) => calculateAverage(b) - calculateAverage(a));
+    const topStudent = sorted[0];
+    if (topEl) topEl.textContent = `${topStudent.name} (${calculateAverage(topStudent)} pts)`;
+  }
+
+  renderStudentsTable();
+
+  const searchInput = document.getElementById('searchStudent');
+  const gradeSelect = document.getElementById('filterGrade');
+
+  if (searchInput) {
+    searchInput.addEventListener('input', () => renderStudentsTable(searchInput.value, gradeSelect ? gradeSelect.value : 'all'));
+  }
+
+  if (gradeSelect) {
+    gradeSelect.addEventListener('change', () => renderStudentsTable(searchInput ? searchInput.value : '', gradeSelect.value));
+  }
+
+  const btnExportJSON = document.getElementById('btnExportJSON');
+  if (btnExportJSON) {
+    btnExportJSON.addEventListener('click', () => {
+      const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(studentsData, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute('href', dataStr);
+      downloadAnchor.setAttribute('download', 'Reporte_Estudiantes_Eton.json');
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      showToast('Archivo JSON exportado con éxito', 'success');
+    });
+  }
+
+  const btnExportExcel = document.getElementById('btnExportExcel');
+  if (btnExportExcel) {
+    btnExportExcel.addEventListener('click', () => {
+      if (typeof XLSX === 'undefined') {
+        showToast('Librería XLSX cargando...', 'warning');
+        return;
+      }
+
+      const worksheet = XLSX.utils.json_to_sheet(studentsData.map(s => ({
+        'Cédula': s.id,
+        'Estudiante': s.name,
+        'Nivel': `${s.grade}° Año`,
+        'Matemáticas': s.math,
+        'Español': s.spanish,
+        'Inglés': s.english,
+        'Promedio': calculateAverage(s)
+      })));
+
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Notas');
+      XLSX.writeFile(workbook, 'Calificaciones_Colegio_Eton.xlsx');
+      showToast('Archivo Excel generado exitosamente', 'success');
+    });
+  }
+
+  const btnExportPDF = document.getElementById('btnExportPDF');
+  if (btnExportPDF) {
+    btnExportPDF.addEventListener('click', () => {
+      const element = document.getElementById('pdfReportContainer');
+      if (!element) return;
+
+      const opt = {
+        margin: 10,
+        filename: 'Reporte_Notas_Colegio_Eton.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+      };
+
+      html2pdf().set(opt).from(element).save();
+      showToast('Generando documento PDF...', 'success');
+    });
+  }
+
+  const importFileInput = document.getElementById('importFile');
+  if (importFileInput) {
+    importFileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      if (file.name.endsWith('.json')) {
+        reader.onload = (event) => {
+          try {
+            const imported = JSON.parse(event.target.result);
+            studentsData = imported;
+            localStorage.setItem('studentsData', JSON.stringify(studentsData));
+            renderStudentsTable();
+            showToast('Datos cargados desde archivo JSON', 'success');
+          } catch (err) {
+            showToast('Error al leer el archivo JSON', 'error');
+          }
+        };
+        reader.readAsText(file);
+      }
+    });
+  }
+
+  window.downloadSinglePDF = function(studentId) {
+    const student = studentsData.find(s => s.id === studentId);
+    if (!student) return;
+
+    const tempDiv = document.createElement('div');
+    tempDiv.style.padding = '20px';
+    tempDiv.style.fontFamily = 'sans-serif';
+    tempDiv.innerHTML = `
+      <h2 style="color: #0d9488;">COLEGIO ETON — REPORTES ACADÉMICOS</h2>
+      <hr>
+      <h3>Boleta de Calificaciones</h3>
+      <p><strong>Estudiante:</strong> ${student.name}</p>
+      <p><strong>Cédula:</strong> ${student.id}</p>
+      <p><strong>Nivel:</strong> ${student.grade}° Año</p>
+      <br>
+      <table border="1" cellpadding="8" cellspacing="0" style="width:100%; text-align:left;">
+        <tr><th>Materia</th><th>Nota</th></tr>
+        <tr><td>Matemáticas</td><td>${student.math}</td></tr>
+        <tr><td>Español</td><td>${student.spanish}</td></tr>
+        <tr><td>Inglés</td><td>${student.english}</td></tr>
+        <tr><th>PROMEDIO FINAL</th><th>${calculateAverage(student)} pts</th></tr>
+      </table>
+    `;
+
+    html2pdf().set({ margin: 10, filename: `Boleta_${student.name}.pdf` }).from(tempDiv).save();
+    showToast(`Descargando boleta de ${student.name}`, 'success');
+  };
+
 });

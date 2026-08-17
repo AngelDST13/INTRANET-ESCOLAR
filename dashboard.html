@@ -4,8 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Colegio Eton — Intranet Escolar</title>
+  
+  <!-- CSS & Iconos -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
+
+  <!-- LIBRERÍAS EXTERNAS (PDF & EXCEL) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 
@@ -24,7 +30,7 @@
       </button>
 
       <div class="user-profile-info" style="display: flex; align-items: center; gap: 10px;">
-        <!-- Imagen de Perfil en la barra superior (Reparada) -->
+        <!-- Avatar Header -->
         <img id="userAvatar" src="https://ui-avatars.com/api/?name=Angel+Salazar&background=0d9488&color=fff&bold=true" alt="Avatar" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary);">
         
         <span class="user-name" id="userName">Angel Salazar</span>
@@ -92,46 +98,149 @@
           <hr style="margin: 30px 0; border: none; border-top: 1px solid var(--border-color);">
           <h3 style="margin-bottom: 15px;">Publicaciones Recientes</h3>
 
-          <!-- Contenedor dinámico de comunicados guardados -->
           <div id="postsContainer"></div>
         </div>
       </section>
 
-      <!-- SECCIÓN 2: Módulo Académico -->
+      <!-- SECCIÓN 2: Módulo Académico (COMPLETO) -->
       <section id="section-academico" class="dashboard-section" style="display: none;">
         <div class="card">
-          <h2 class="card-title">
-            <i class="fa-solid fa-graduation-cap" style="color: var(--primary);"></i>
-            Registro de Calificaciones y Asistencia
-          </h2>
-          <p class="card-subtitle">Consulta e ingreso de expediente académico</p>
-          <p>Contenido del módulo académico cargado correctamente.</p>
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
+            <div>
+              <h2 class="card-title"><i class="fa-solid fa-graduation-cap" style="color: var(--primary);"></i> Módulo Académico</h2>
+              <p class="card-subtitle">Gestión de calificaciones, cuadro de honor e importación/exportación</p>
+            </div>
+            
+            <!-- ACCIONES DE IMPORTACIÓN/EXPORTACIÓN -->
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button id="btnExportJSON" class="btn-primary" type="button" style="background: #3b82f6;"><i class="fa-solid fa-file-code"></i> Exportar JSON</button>
+              <button id="btnExportExcel" class="btn-primary" type="button" style="background: #10b981;"><i class="fa-solid fa-file-excel"></i> Descargar Excel</button>
+              <button id="btnExportPDF" class="btn-primary" type="button" style="background: #ef4444;"><i class="fa-solid fa-file-pdf"></i> Generar Reporte PDF</button>
+              
+              <label for="importFile" class="btn-primary" style="background: #8b5cf6; cursor: pointer; display: inline-block;">
+                <i class="fa-solid fa-file-import"></i> Cargar Datos (JSON/Excel)
+              </label>
+              <input type="file" id="importFile" accept=".json, .xlsx, .xls" style="display: none;">
+            </div>
+          </div>
+
+          <!-- TARJETAS DE MÉTRICAS -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 25px;">
+            <div style="background: var(--bg-main, #0f172a); border: 1px solid var(--border-color, #334155); padding: 15px; border-radius: 10px;">
+              <span style="font-size: 0.8rem; color: var(--text-muted);">Promedio General</span>
+              <h3 id="statAverage" style="font-size: 1.8rem; color: var(--primary); margin-top: 5px;">0 pts</h3>
+            </div>
+            <div style="background: var(--bg-main, #0f172a); border: 1px solid var(--border-color, #334155); padding: 15px; border-radius: 10px;">
+              <span style="font-size: 0.8rem; color: var(--text-muted);">Estudiantes Registrados</span>
+              <h3 id="statTotalStudents" style="font-size: 1.8rem; margin-top: 5px;">0</h3>
+            </div>
+            <div style="background: var(--bg-main, #0f172a); border: 1px solid var(--border-color, #334155); padding: 15px; border-radius: 10px;">
+              <span style="font-size: 0.8rem; color: #eab308;"><i class="fa-solid fa-trophy"></i> Top Promedio (Cuadro de Honor)</span>
+              <h3 id="statTopStudent" style="font-size: 1rem; margin-top: 8px; font-weight: bold;">Sin datos</h3>
+            </div>
+          </div>
+
+          <!-- FILTROS DE BÚSQUEDA -->
+          <div style="display: flex; gap: 15px; margin-bottom: 15px; flex-wrap: wrap;">
+            <input type="text" id="searchStudent" class="input-control" placeholder="Buscar por estudiante o cédula..." style="max-width: 300px;">
+            <select id="filterGrade" class="input-control" style="max-width: 180px;">
+              <option value="all">Todos los Niveles</option>
+              <option value="10">10° Año</option>
+              <option value="11">11° Año</option>
+            </select>
+          </div>
+
+          <!-- TABLA DINÁMICA -->
+          <div style="overflow-x: auto;" id="pdfReportContainer">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+              <thead>
+                <tr style="border-bottom: 2px solid var(--border-color, #334155); background: rgba(255,255,255,0.03);">
+                  <th style="padding: 12px;">Estudiante</th>
+                  <th style="padding: 12px;">Cédula</th>
+                  <th style="padding: 12px;">Nivel</th>
+                  <th style="padding: 12px;">Matemáticas</th>
+                  <th style="padding: 12px;">Español</th>
+                  <th style="padding: 12px;">Inglés</th>
+                  <th style="padding: 12px;">Promedio</th>
+                  <th style="padding: 12px;">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="studentsTableBody">
+                <!-- Se llena mediante JS -->
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 
-      <!-- SECCIÓN 3: Reserva de Recursos -->
+      <!-- SECCIÓN 3: Reserva de Recursos (COMPLETO) -->
       <section id="section-recursos" class="dashboard-section" style="display: none;">
         <div class="card">
-          <h2 class="card-title">
-            <i class="fa-solid fa-calendar-check" style="color: var(--primary);"></i>
-            Reserva de Recursos
-          </h2>
-          <p class="card-subtitle">Apartado de salas de cómputo, proyectores y laboratorios</p>
+          <h2 class="card-title"><i class="fa-solid fa-calendar-check" style="color: var(--primary);"></i> Reserva de Recursos</h2>
+          <p class="card-subtitle">Apartado de salas de cómputo, laboratorios y proyectores</p>
+          
+          <form id="resourceForm" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0;">
+            <div class="form-group">
+              <label for="resType">Recurso Solicitado</label>
+              <select id="resType" class="input-control" required>
+                <option value="Laboratorio de Cómputo A">Laboratorio de Cómputo A</option>
+                <option value="Proyector Multimedia 02">Proyector Multimedia 02</option>
+                <option value="Auditorio Principal">Auditorio Principal</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="resDate">Fecha de Uso</label>
+              <input type="date" id="resDate" class="input-control" required>
+            </div>
+            <div class="form-group">
+              <label for="resTime">Horario</label>
+              <input type="time" id="resTime" class="input-control" required>
+            </div>
+            <div class="form-group" style="align-self: end;">
+              <button type="submit" class="btn-primary" style="width: 100%;"><i class="fa-solid fa-bookmark"></i> Confirmar Reserva</button>
+            </div>
+          </form>
+
+          <h3>Reservas Activas</h3>
+          <ul id="resourceList" style="margin-top: 15px; list-style: none; padding: 0;"></ul>
         </div>
       </section>
 
-      <!-- SECCIÓN 4: Gestión de Usuarios -->
+      <!-- SECCIÓN 4: Gestión de Usuarios (COMPLETO) -->
       <section id="section-usuarios" class="dashboard-section" style="display: none;">
         <div class="card">
-          <h2 class="card-title">
-            <i class="fa-solid fa-users-gear" style="color: var(--primary);"></i>
-            Gestión de Usuarios
-          </h2>
-          <p class="card-subtitle">Administración de cuentas de estudiantes, docentes y tutores</p>
+          <h2 class="card-title"><i class="fa-solid fa-users-gear" style="color: var(--primary);"></i> Gestión de Cuentas</h2>
+          <p class="card-subtitle">Administración de acceso para docentes, estudiantes y tutores</p>
+          
+          <div style="display: flex; gap: 10px; margin: 20px 0;">
+            <button class="btn-primary" id="btnAddUser" type="button"><i class="fa-solid fa-user-plus"></i> Registrar Nuevo Usuario</button>
+          </div>
+
+          <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+            <thead>
+              <tr style="border-bottom: 2px solid var(--border-color, #334155);">
+                <th style="padding: 10px;">Usuario</th>
+                <th style="padding: 10px;">Rol</th>
+                <th style="padding: 10px;">Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding: 10px;">Angel Salazar (admin@eton.edu)</td>
+                <td><span class="user-role-badge">ADMIN</span></td>
+                <td><span style="color: #10b981;">● Activo</span></td>
+              </tr>
+              <tr>
+                <td style="padding: 10px;">Maria Delgado (m.delgado@eton.edu)</td>
+                <td><span class="user-role-badge" style="background: #8b5cf6;">DOCENTE</span></td>
+                <td><span style="color: #10b981;">● Activo</span></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </section>
 
-      <!-- SECCIÓN 5: Mi Perfil (COMPLETA Y FUNCIONAL) -->
+      <!-- SECCIÓN 5: Mi Perfil (COMPLETO) -->
       <section id="section-perfil" class="dashboard-section" style="display: none;">
         <div class="card">
           <h2 class="card-title">
@@ -140,7 +249,7 @@
           </h2>
           <p class="card-subtitle">Información general y edición de datos de la cuenta activa</p>
 
-          <!-- ÁREA DE FOTO DE PERFIL Y CAMBIO -->
+          <!-- FOTO DE PERFIL Y BOTONES -->
           <div style="display: flex; gap: 20px; align-items: center; margin: 25px 0; flex-wrap: wrap;">
             <div style="position: relative;">
               <img id="profileLargeAvatar" src="https://ui-avatars.com/api/?name=Angel+Salazar&background=0d9488&color=fff&bold=true" alt="Avatar" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary);">
@@ -158,7 +267,7 @@
             </div>
           </div>
 
-          <!-- FORMULARIO DE EDICIÓN DE DATOS -->
+          <!-- FORMULARIO DE EDICIÓN -->
           <form id="profileForm">
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px;">
               
