@@ -63,3 +63,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+document.addEventListener('DOMContentLoaded', () => {
+  const authForm = document.getElementById('authForm');
+
+  if (authForm) {
+    authForm.addEventListener('submit', (event) => {
+      // Prevenir que la página se recargue por defecto
+      event.preventDefault();
+
+      // Obtener el rol y usuario (por si deseas guardarlos en LocalStorage)
+      const rol = document.getElementById('rol').value;
+      const username = document.getElementById('username').value;
+
+      // Guardar sesión simple
+      localStorage.setItem('userRole', rol);
+      localStorage.setItem('username', username);
+
+      // Redirigir a la vista del dashboard
+      window.location.href = 'dashboard.html';
+    });
+  }
+});
+

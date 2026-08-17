@@ -394,3 +394,1072 @@ input:focus, select:focus, textarea:focus {
 @keyframes fadeOut {
   to { transform: translateX(120%); opacity: 0; }
 }
+
+
+/* Variables globales para colores y medidas */
+:root {
+  --primary-color: #0d8a72;
+  --primary-hover: #0a6c59;
+  --bg-color: #f4f6f9;
+  --card-bg: #ffffff;
+  --text-main: #2c3e50;
+  --text-muted: #7f8c8d;
+  --border-color: #e0e6ed;
+  --radius: 12px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: var(--bg-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Tarjeta contenedora principal */
+.login-container {
+  background: var(--card-bg);
+  width: 100%;
+  max-width: 440px;
+  padding: 35px 30px;
+  border-radius: var(--radius);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+/* Encabezado */
+.header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.brand-tag {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.header h1 {
+  font-size: 1.8rem;
+  color: var(--text-main);
+  margin: 5px 0 3px 0;
+}
+
+.header p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* Pestañas (Iniciar Sesión / Crear Cuenta) */
+.tabs {
+  display: flex;
+  background: #f0f3f7;
+  border-radius: 8px;
+  padding: 4px;
+  margin-bottom: 25px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.tab-btn.active {
+  background: #ffffff;
+  color: var(--primary-color);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Grupos de entrada */
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.form-group label i {
+  margin-right: 6px;
+  color: var(--primary-color);
+}
+
+.input-control {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: var(--text-main);
+  background-color: #fafbfc;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-control:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(13, 138, 114, 0.15);
+  background-color: #ffffff;
+}
+
+select.input-control {
+  cursor: pointer;
+}
+
+/* Botón principal */
+.btn-submit {
+  width: 100%;
+  padding: 13px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.btn-submit:hover {
+  background-color: var(--primary-hover);
+}
+/* ==========================================
+   VARIABLES DE TEMA (MODO DÍA / NOCHE)
+   ========================================== */
+:root {
+  /* MODO DÍA (Por defecto) */
+  --bg-main: #f4f6f9;
+  --bg-card: #ffffff;
+  --bg-sidebar: #ffffff;
+  --bg-header: #ffffff;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  
+  --primary: #0d8a72;
+  --primary-hover: #0a6c59;
+  --primary-light: #e6f4f1;
+  
+  --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  --table-hover: #f8fafc;
+}
+
+/* MODO NOCHE (Tema Oscuro) */
+body.dark-mode {
+  --bg-main: #0f172a;
+  --bg-card: #1e293b;
+  --bg-sidebar: #1e293b;
+  --bg-header: #1e293b;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-color: #334155;
+  
+  --primary: #10b981;
+  --primary-hover: #059669;
+  --primary-light: rgba(16, 185, 129, 0.15);
+  
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  --table-hover: #334155;
+}
+
+/* ==========================================
+   RESET & LAYOUT ESTRUCTURAL
+   ========================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* HEADER ARRIBA EN TODA LA PÁGINA */
+.top-navbar {
+  height: 65px;
+  background-color: var(--bg-header);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 25px;
+  box-shadow: var(--shadow);
+  z-index: 10;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-badge {
+  background-color: var(--primary);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.theme-toggle-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 8px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.theme-toggle-btn:hover {
+  background-color: var(--primary-light);
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+.user-role-badge {
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.btn-logout {
+  background: transparent;
+  border: none;
+  color: #ef4444;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 5px;
+}
+
+/* ESTRUCTURA PRINCIPAL (SIDEBAR + MAIN CONTENT) */
+.main-wrapper {
+  display: flex;
+  flex: 1;
+}
+
+/* SIDEBAR A LA IZQUIERDA */
+.sidebar {
+  width: 250px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  padding: 20px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+.nav-item:hover {
+  background-color: var(--primary-light);
+  color: var(--primary);
+}
+
+.nav-item.active {
+  background-color: var(--primary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(13, 138, 114, 0.25);
+}
+
+/* CONTENIDO PRINCIPAL A LA DERECHA */
+.content-area {
+  flex: 1;
+  padding: 30px;
+}
+
+.card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 25px;
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.3rem;
+  color: var(--text-main);
+  margin-bottom: 5px;
+}
+
+.card-subtitle {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+
+/* TABLAS */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th {
+  padding: 12px 16px;
+  border-bottom: 2px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+td {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-main);
+  font-size: 0.9rem;
+}
+
+tbody tr:hover {
+  background-color: var(--table-hover);
+}
+
+.status-badge {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: var(--primary);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+/* ==========================================
+   VARIABLES DE TEMA (ALTO CONTRASTE Y LEGIBILIDAD)
+   ========================================== */
+:root {
+  /* MODO DÍA (Por defecto) */
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-sidebar: #ffffff;
+  --bg-header: #ffffff;
+  --bg-input: #f1f5f9;
+  
+  --text-main: #0f172a;       /* Texto principal casi negro para máxima lectura */
+  --text-muted: #475569;      /* Texto secundario gris oscuro legible */
+  --border-color: #cbd5e1;
+  
+  --primary: #0d8a72;
+  --primary-hover: #0a6c59;
+  --primary-light: #e6f4f1;
+  --accent-badge: #e0f2fe;
+  --accent-badge-text: #0369a1;
+
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+/* MODO NOCHE (Tema Oscuro Mejorado) */
+body.dark-mode {
+  --bg-main: #0b0f19;
+  --bg-card: #151c2c;
+  --bg-sidebar: #151c2c;
+  --bg-header: #151c2c;
+  --bg-input: #1e293b;
+  
+  --text-main: #f8fafc;       /* Blanco brillante para excelente contraste */
+  --text-muted: #cbd5e1;      /* Gris claro de alta legibilidad */
+  --border-color: #334155;
+  
+  --primary: #10b981;
+  --primary-hover: #059669;
+  --primary-light: rgba(16, 185, 129, 0.15);
+  --accent-badge: rgba(56, 189, 248, 0.15);
+  --accent-badge-text: #38bdf8;
+
+  --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+}
+
+/* ==========================================
+   RESET & LAYOUT BASE
+   ========================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================
+   HEADER SUPERIOR (FIXED & RESPONSIVE)
+   ========================================== */
+.top-navbar {
+  width: 100%;
+  height: 65px;
+  background-color: var(--bg-header);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow);
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-badge {
+  background-color: var(--primary);
+  color: #ffffff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+.nav-brand h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.theme-toggle-btn {
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--primary);
+}
+
+.user-profile-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.user-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.user-role-badge {
+  background: var(--accent-badge);
+  color: var(--accent-badge-text);
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.btn-logout {
+  background: transparent;
+  border: none;
+  color: #ef4444;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.btn-logout:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* ==========================================
+   ESTRUCTURA DASHBOARD (SIDEBAR + MAIN)
+   ========================================== */
+.main-wrapper {
+  display: flex;
+  flex: 1;
+  width: 100%;
+}
+
+/* SIDEBAR LATERAL */
+.sidebar {
+  width: 260px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  padding: 20px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  shrink: 0;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.nav-item:hover {
+  background-color: var(--primary-light);
+  color: var(--primary);
+}
+
+.nav-item.active {
+  background-color: var(--primary);
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(13, 138, 114, 0.3);
+}
+
+/* CONTENIDO PRINCIPAL */
+.content-area {
+  flex: 1;
+  padding: 30px;
+  max-width: 1200px;
+}
+
+.card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 6px;
+}
+
+.card-subtitle {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  margin-bottom: 22px;
+}
+
+/* FORMULARIOS Y CAMPOS DE TEXTO */
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 8px;
+}
+
+.input-control {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: var(--text-main);
+  background-color: var(--bg-input);
+}
+
+.input-control:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+textarea.input-control {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.btn-primary {
+  padding: 12px 24px;
+  background-color: var(--primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+}
+
+/* ANUNCIOS Y COMUNICADOS */
+.post-card {
+  background-color: var(--bg-main);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 18px;
+  margin-top: 15px;
+}
+
+.post-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 5px;
+}
+
+.post-meta {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.post-body {
+  font-size: 0.93rem;
+  color: var(--text-main);
+  line-height: 1.5;
+}
+
+/* ==========================================
+   DISEÑO RESPONSIVE (MÓVILES Y TABLETS)
+   ========================================== */
+@media (max-width: 900px) {
+  .main-wrapper {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 10px;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .nav-item {
+    white-space: nowrap;
+    padding: 8px 14px;
+    font-size: 0.88rem;
+  }
+
+  .content-area {
+    padding: 15px;
+  }
+
+  .user-name {
+    display: none; /* Ocultar nombre en pantallas muy pequeñas */
+  }
+}
+/* --- PARCHE MODO NOCHE Y CONTRASTE --- */
+body.dark-mode {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+}
+
+/* Fuerza el fondo y texto claro en cards, header e inputs cuando activa dark-mode */
+body.dark-mode .top-navbar,
+body.dark-mode .sidebar,
+body.dark-mode .card {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+  color: #f8fafc !important;
+}
+
+body.dark-mode .input-control {
+  background-color: #0f172a !important;
+  border-color: #334155 !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .post-card {
+  background-color: #0f172a !important;
+  border-color: #334155 !important;
+}
+
+body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, body.dark-mode h4,
+body.dark-mode span, body.dark-mode p, body.dark-mode label {
+  color: #f8fafc !important;
+}
+
+/* Botón de Modo Noche visualmente claro */
+.theme-toggle-btn {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+/* ======================================================
+   CORRECCIÓN DEFINITIVA DE MODO NOCHE & BOTÓN DE TEMA
+   ====================================================== */
+
+/* 1. Fondo global oscuro al activar dark-mode */
+html.dark-mode,
+body.dark-mode {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+}
+
+/* 2. Contenedores principales en modo noche */
+body.dark-mode .top-navbar,
+body.dark-mode .sidebar,
+body.dark-mode .card,
+body.dark-mode .post-card,
+body.dark-mode main,
+body.dark-mode section {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+  color: #f8fafc !important;
+}
+
+body.dark-mode h1, 
+body.dark-mode h2, 
+body.dark-mode h3, 
+body.dark-mode h4, 
+body.dark-mode p, 
+body.dark-mode span, 
+body.dark-mode label {
+  color: #f8fafc !important;
+}
+
+body.dark-mode .input-control {
+  background-color: #0f172a !important;
+  border-color: #334155 !important;
+  color: #ffffff !important;
+}
+
+/* 3. Corrección visual del botón "Modo Noche" en la barra */
+.theme-toggle-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 6px 14px !important;
+  background-color: #f1f5f9 !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 20px !important;
+  color: #1e293b !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  line-height: 1 !important;
+}
+
+body.dark-mode .theme-toggle-btn {
+  background-color: #334155 !important;
+  border-color: #475569 !important;
+  color: #f8fafc !important;
+}
+/* ======================================================
+   CORRECCIÓN GLOBAL DE MODO NOCHE & BOTÓN DE TEMA
+   ====================================================== */
+
+/* Posición del botón en el Login */
+.theme-container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 20px;
+  color: #0f172a;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* MODO NOCHE PARA TODO EL PROYECTO */
+html.dark-mode,
+body.dark-mode {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+}
+
+body.dark-mode .login-container,
+body.dark-mode .card,
+body.dark-mode .top-navbar,
+body.dark-mode .sidebar {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+  color: #f8fafc !important;
+}
+
+body.dark-mode .theme-toggle-btn {
+  background-color: #334155 !important;
+  border-color: #475569 !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .input-control,
+body.dark-mode select.input-control {
+  background-color: #0f172a !important;
+  border-color: #334155 !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode label,
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode p {
+  color: #f8fafc !important;
+}
+/* ======================================================
+   CORRECCIÓN DE TEMA (DÍA / NOCHE) Y CONTENEDORES
+   ====================================================== */
+
+/* MODO DÍA (POR DEFECTO) */
+:root {
+  --bg-body: #f1f5f9;
+  --bg-container: #ffffff;
+  --bg-card: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+}
+
+/* MODO NOCHE ACTIVADO EN HTML O BODY */
+html.dark-mode,
+body.dark-mode {
+  --bg-body: #0b0f19;
+  --bg-container: #151c2c;
+  --bg-card: #1e293b;
+  --text-main: #f8fafc;
+  --text-muted: #cbd5e1;
+  --border-color: #334155;
+}
+
+/* Aplicación global de variables */
+html, body {
+  background-color: var(--bg-body) !important;
+  color: var(--text-main) !important;
+}
+
+.top-navbar,
+.sidebar,
+.card,
+.main-wrapper,
+.content-area,
+.post-card {
+  background-color: var(--bg-card) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-main) !important;
+}
+
+.top-navbar h2, .card-title, .post-title, label, p, span {
+  color: var(--text-main) !important;
+}
+
+/* Botón Tema Ajustado (Sin texto cortado) */
+.theme-toggle-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 6px 14px !important;
+  background-color: transparent !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 20px !important;
+  color: var(--text-main) !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  min-width: 120px !important;
+}
+/* ======================================================
+   SOLUCIÓN MODO DÍA / NOCHE Y CONTENEDORES
+   ====================================================== */
+
+/* Tema Día (Por Defecto) */
+:root {
+  --bg-main: #f1f5f9;
+  --bg-card: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border-color: #cbd5e1;
+}
+
+/* Tema Noche (Cuando html o body tiene la clase dark-mode) */
+html.dark-mode,
+body.dark-mode {
+  --bg-main: #0b0f19;
+  --bg-card: #1e293b;
+  --text-main: #f8fafc;
+  --text-muted: #cbd5e1;
+  --border-color: #334155;
+}
+
+/* Forzar el cambio de color en toda la pantalla */
+html, body {
+  background-color: var(--bg-main) !important;
+  color: var(--text-main) !important;
+}
+
+.main-wrapper,
+.content-area,
+.top-navbar,
+.sidebar,
+.card,
+.post-card {
+  background-color: var(--bg-card) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-main) !important;
+}
+
+h1, h2, h3, h4, p, span, label {
+  color: var(--text-main) !important;
+}
+
+.input-control {
+  background-color: var(--bg-main) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-main) !important;
+}
+
+/* Fix para que el botón de Modo Día/Noche no corte el texto */
+.theme-toggle-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 6px 14px !important;
+  background-color: transparent !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 20px !important;
+  color: var(--text-main) !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  min-width: 125px !important;
+}
