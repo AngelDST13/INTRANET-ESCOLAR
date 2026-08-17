@@ -321,61 +321,69 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
-  // CONTROL DE ROLES Y PRIVILEGIOS DE VISTA
+  // CONTROL ESTRICTO DE ROLES Y PRIVACIDAD
   // ==========================================
 
   const currentUser = JSON.parse(localStorage.getItem('userSession')) || {
-    name: 'Angel Salazar',
+    name: 'Usuario',
     role: 'TUTOR',
     childId: '118230491'
   };
 
   function applyRolePermissions() {
-    const currentRole = currentUser.role ? currentUser.role.toUpperCase() : 'ESTUDIANTE';
+    const role = currentUser.role ? currentUser.role.toUpperCase().trim() : 'ESTUDIANTE';
+    const isAuthorizedStaff = (role === 'ADMIN' || role === 'DOCENTE');
 
     const userRoleBadge = document.getElementById('userRoleBadge');
-    if (userRoleBadge) userRoleBadge.textContent = currentRole;
+    if (userRoleBadge) {
+      userRoleBadge.textContent = role;
+    }
 
     const navUsers = document.querySelector('[data-section="usuarios"]');
     const navResources = document.querySelector('[data-section="recursos"]');
-    const academicActions = document.querySelectorAll('#btnExportJSON, #btnExportExcel, #btnExportPDF, label[for="importFile"]');
 
-    if (currentRole === 'TUTOR' || currentRole === 'ESTUDIANTE') {
+    if (!isAuthorizedStaff) {
       if (navUsers) navUsers.style.display = 'none';
       if (navResources) navResources.style.display = 'none';
 
-      academicActions.forEach(btn => {
-        if (btn) btn.style.display = 'none';
-      });
+      const academicButtons = document.querySelectorAll('#btnExportJSON, #btnExportExcel, #btnExportPDF, label[for="importFile"]');
+      academicButtons.forEach(btn => { if (btn) btn.style.display = 'none'; });
+
+      const searchStudentInput = document.getElementById('searchStudent');
+      const filterGradeSelect = document.getElementById('filterGrade');
+      if (searchStudentInput) searchStudentInput.style.display = 'none';
+      if (filterGradeSelect) filterGradeSelect.style.display = 'none';
     } else {
       if (navUsers) navUsers.style.display = 'flex';
       if (navResources) navResources.style.display = 'flex';
-      academicActions.forEach(btn => {
-        if (btn) btn.style.display = 'inline-block';
-      });
+
+      const academicButtons = document.querySelectorAll('#btnExportJSON, #btnExportExcel, #btnExportPDF, label[for="importFile"]');
+      academicButtons.forEach(btn => { if (btn) btn.style.display = 'inline-block'; });
+
+      const searchStudentInput = document.getElementById('searchStudent');
+      const filterGradeSelect = document.getElementById('filterGrade');
+      if (searchStudentInput) searchStudentInput.style.display = 'inline-block';
+      if (filterGradeSelect) filterGradeSelect.style.display = 'inline-block';
     }
 
     renderStudentsTable();
   }
 
-  // ==========================================
-  // RENDERIZADO DE TABLA CON FILTRO DE PRIVACIDAD
-  // ==========================================
-
   function renderStudentsTable(filterText = '', filterGrade = 'all') {
     const tbody = document.getElementById('studentsTableBody');
     if (!tbody) return;
 
-    const currentRole = currentUser.role ? currentUser.role.toUpperCase() : 'ESTUDIANTE';
+    const role = currentUser.role ? currentUser.role.toUpperCase().trim() : 'ESTUDIANTE';
+    const isAuthorizedStaff = (role === 'ADMIN' || role === 'DOCENTE');
 
     let visibleStudents = studentsData || [];
 
-    if (currentRole === 'TUTOR' || currentRole === 'ESTUDIANTE') {
-      visibleStudents = visibleStudents.filter(s => s.id === currentUser.childId);
+    if (!isAuthorizedStaff) {
+      visibleStudents = visibleStudents.filter(s => String(s.id).trim() === String(currentUser.childId).trim());
     } else {
       visibleStudents = visibleStudents.filter(s => {
-        const matchText = s.name.toLowerCase().includes(filterText.toLowerCase()) || s.id.includes(filterText);
-        const matchGrade = filterGrade === 'all' || s.grade === filterGrade;
+        const matchText = s.name.toLowerCase().includes(filterText.toLowerCase()) || String(s.id).includes(filterText);
+        const matchGrade = filterGrade === 'all' || String(s.grade) === String(filterGrade);
         return matchText && matchGrade;
       });
     }
@@ -384,18 +392,15 @@ document.addEventListener('DOMContentLoaded', () => {
       tbody.innerHTML = `
         <tr>
           <td colspan="8" style="text-align: center; padding: 25px; color: var(--text-muted);">
-            <i class="fa-solid fa-lock" style="font-size: 1.5rem; margin-bottom: 8px; display: block;"></i>
-            No tiene permisos para ver registros de otros estudiantes o no se encontró la información del expediente.
+            <i class="fa-solid fa-lock" style="font-size: 1.5rem; margin-bottom: 8px; display: block; color: #ef4444;"></i>
+            No tiene permisos para consultar información de otros estudiantes o no se encontró el expediente asociado.
           </td>
         </tr>`;
-      if (typeof updateAcademicStats === 'function') {
-        updateAcademicStats([]);
-      }
       return;
     }
 
     tbody.innerHTML = visibleStudents.map(s => {
-      const avg = calculateAverage ? calculateAverage(s) : 0;
+      const avg = typeof calculateAverage === 'function' ? calculateAverage(s) : 0;
       const badgeColor = avg >= 90 ? '#10b981' : (avg >= 70 ? '#f59e0b' : '#ef4444');
 
       return `
@@ -425,18 +430,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  applyRolePermissions();
-
-  const searchInput = document.getElementById('searchStudent');
-  const gradeSelect = document.getElementById('filterGrade');
-
-  if (searchInput) {
-    searchInput.addEventListener('input', () => renderStudentsTable(searchInput.value, gradeSelect ? gradeSelect.value : 'all'));
-  }
-
-  if (gradeSelect) {
-    gradeSelect.addEventListener('change', () => renderStudentsTable(searchInput ? searchInput.value : '', gradeSelect.value));
-  }
+  document.addEventListener('DOMContentLoaded', () => {
+    applyRolePermissions();
+  });
 
   const btnExportJSON = document.getElementById('btnExportJSON');
   if (btnExportJSON) {
