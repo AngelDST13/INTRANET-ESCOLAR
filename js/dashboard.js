@@ -320,99 +320,81 @@ document.addEventListener('DOMContentLoaded', () => {
     return Math.round((s.math + s.spanish + s.english) / 3);
   }
 
-  function renderStudentsTable(filterText = '', filterGrade = 'all') {
-    const tbody = document.getElementById('studentsTableBody');
-    if (!tbody) return;
+  // ==========================================
+  // CONTROL DE ROLES Y PRIVILEGIOS DE VISTA
+  // ==========================================
 
-    const filtered = studentsData.filter(s => {
-      const matchText = s.name.toLowerCase().includes(filterText.toLowerCase()) || s.id.includes(filterText);
-      const matchGrade = filterGrade === 'all' || s.grade === filterGrade;
-      return matchText && matchGrade;
-    });
-
-    tbody.innerHTML = filtered.map(s => {
-      const avg = calculateAverage(s);
-      const badgeColor = avg >= 90 ? '#10b981' : (avg >= 70 ? '#f59e0b' : '#ef4444');
-
-      return `
-        <tr style="border-bottom: 1px solid var(--border-color, #334155);">
-          <td style="padding: 12px; font-weight: 500;">${s.name}</td>
-          <td style="padding: 12px;">${s.id}</td>
-          <td style="padding: 12px;">${s.grade}° Año</td>
-          <td style="padding: 12px;">${s.math}</td>
-          <td style="padding: 12px;">${s.spanish}</td>
-          <td style="padding: 12px;">${s.english}</td>
-          <td style="padding: 12px;"><span style="background: ${badgeColor}; color: white; padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 0.8rem;">${avg} pts</span></td>
-          <td style="padding: 12px;">
-            <button onclick="downloadSinglePDF('${s.id}')" style="background: transparent; border: none; color: #ef4444; cursor: pointer;" title="Descargar Boleta PDF"><i class="fa-solid fa-file-pdf"></i></button>
-          </td>
-        </tr>
-      `;
-    }).join('');
-
-    updateAcademicStats();
-  }
-
-  function updateAcademicStats(dataSet = studentsData) {
-    const totalEl = document.getElementById('statTotalStudents');
-    const avgEl = document.getElementById('statAverage');
-    const topEl = document.getElementById('statTopStudent');
-
-    if (!dataSet || dataSet.length === 0) {
-      if (totalEl) totalEl.textContent = '0';
-      if (avgEl) avgEl.textContent = '0 pts';
-      if (topEl) topEl.textContent = 'Sin datos';
-      return;
-    }
-
-    if (totalEl) totalEl.textContent = dataSet.length;
-
-    const globalAvg = Math.round(dataSet.reduce((acc, curr) => acc + calculateAverage(curr), 0) / dataSet.length);
-    if (avgEl) avgEl.textContent = `${globalAvg} pts`;
-
-    const sorted = [...dataSet].sort((a, b) => calculateAverage(b) - calculateAverage(a));
-    const topStudent = sorted[0];
-    if (topEl) topEl.textContent = `${topStudent.name} (${calculateAverage(topStudent)} pts)`;
-  }
-
-  const activeUser = JSON.parse(localStorage.getItem('userSession')) || {
+  let currentUser = JSON.parse(localStorage.getItem('userSession')) || {
     name: 'Angel Salazar',
     role: 'ADMIN',
     childId: '118230491'
   };
 
+  const roleSimSelect = document.getElementById('roleSimSelect');
+  if (roleSimSelect) {
+    roleSimSelect.value = currentUser.role || 'ADMIN';
+    roleSimSelect.addEventListener('change', (e) => {
+      currentUser.role = e.target.value;
+      localStorage.setItem('userSession', JSON.stringify(currentUser));
+      applyRolePermissions();
+    });
+  }
+
   function applyRolePermissions() {
-    const role = activeUser.role ? activeUser.role.toUpperCase() : 'ESTUDIANTE';
+    const currentRole = currentUser.role ? currentUser.role.toUpperCase() : 'ESTUDIANTE';
 
     const userRoleBadge = document.getElementById('userRoleBadge');
-    if (userRoleBadge) userRoleBadge.textContent = role;
+    if (userRoleBadge) userRoleBadge.textContent = currentRole;
 
     const navUsers = document.querySelector('[data-section="usuarios"]');
     const navResources = document.querySelector('[data-section="recursos"]');
+    const academicActions = document.querySelectorAll('#btnExportJSON, #btnExportExcel, #btnExportPDF, label[for="importFile"]');
 
-    if (role === 'TUTOR' || role === 'ESTUDIANTE') {
+    if (currentRole === 'TUTOR' || currentRole === 'ESTUDIANTE') {
       if (navUsers) navUsers.style.display = 'none';
       if (navResources) navResources.style.display = 'none';
 
-      const adminActions = document.querySelectorAll('.admin-only');
-      adminActions.forEach(el => el.style.display = 'none');
+      academicActions.forEach(btn => {
+        if (btn) btn.style.display = 'none';
+      });
+
+      const activeSection = document.querySelector('.dashboard-section:not([style*="display: none"])');
+      if (activeSection && (activeSection.id === 'section-usuarios' || activeSection.id === 'section-recursos')) {
+        document.querySelectorAll('.dashboard-section').forEach(sec => sec.style.display = 'none');
+        const tablonSection = document.getElementById('section-tablon');
+        if (tablonSection) tablonSection.style.display = 'block';
+
+        document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+        const tablonNav = document.querySelector('[data-section="tablon"]');
+        if (tablonNav) tablonNav.classList.add('active');
+      }
     } else {
       if (navUsers) navUsers.style.display = 'flex';
       if (navResources) navResources.style.display = 'flex';
+      academicActions.forEach(btn => {
+        if (btn) btn.style.display = 'inline-block';
+      });
     }
+
+    renderStudentsTable();
   }
 
-  function renderStudentsTableWithPermissions(filterText = '', filterGrade = 'all') {
+  // ==========================================
+  // RENDERIZADO DE TABLA CON FILTRO DE PRIVACIDAD
+  // ==========================================
+
+  function renderStudentsTable(filterText = '', filterGrade = 'all') {
     const tbody = document.getElementById('studentsTableBody');
     if (!tbody) return;
 
-    const role = activeUser.role ? activeUser.role.toUpperCase() : 'ESTUDIANTE';
+    const currentRole = currentUser.role ? currentUser.role.toUpperCase() : 'ESTUDIANTE';
 
-    let visibleStudents = studentsData;
-    if (role === 'TUTOR') {
-      visibleStudents = studentsData.filter(s => s.id === activeUser.childId);
+    let visibleStudents = studentsData || [];
+
+    if (currentRole === 'TUTOR' || currentRole === 'ESTUDIANTE') {
+      visibleStudents = visibleStudents.filter(s => s.id === currentUser.childId);
     } else {
-      visibleStudents = studentsData.filter(s => {
+      visibleStudents = visibleStudents.filter(s => {
         const matchText = s.name.toLowerCase().includes(filterText.toLowerCase()) || s.id.includes(filterText);
         const matchGrade = filterGrade === 'all' || s.grade === filterGrade;
         return matchText && matchGrade;
@@ -420,13 +402,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (visibleStudents.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px; color: var(--text-muted);">No se encontraron registros académicos autorizados.</td></tr>';
-      updateAcademicStats([]);
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="8" style="text-align: center; padding: 25px; color: var(--text-muted);">
+            <i class="fa-solid fa-lock" style="font-size: 1.5rem; margin-bottom: 8px; display: block;"></i>
+            No tiene permisos para ver registros de otros estudiantes o no se encontró la información del expediente.
+          </td>
+        </tr>`;
+      if (typeof updateAcademicStats === 'function') {
+        updateAcademicStats([]);
+      }
       return;
     }
 
     tbody.innerHTML = visibleStudents.map(s => {
-      const avg = calculateAverage(s);
+      const avg = calculateAverage ? calculateAverage(s) : 0;
       const badgeColor = avg >= 90 ? '#10b981' : (avg >= 70 ? '#f59e0b' : '#ef4444');
 
       return `
@@ -444,28 +434,29 @@ document.addEventListener('DOMContentLoaded', () => {
           </td>
           <td style="padding: 12px;">
             <button onclick="downloadSinglePDF('${s.id}')" class="btn-primary" style="padding: 5px 10px; font-size: 0.8rem; background: #ef4444;" title="Descargar Boleta PDF">
-              <i class="fa-solid fa-file-pdf"></i> Reporte PDF
+              <i class="fa-solid fa-file-pdf"></i> Boleta PDF
             </button>
           </td>
         </tr>
       `;
     }).join('');
 
-    updateAcademicStats(visibleStudents);
+    if (typeof updateAcademicStats === 'function') {
+      updateAcademicStats(visibleStudents);
+    }
   }
 
   applyRolePermissions();
-  renderStudentsTableWithPermissions();
 
   const searchInput = document.getElementById('searchStudent');
   const gradeSelect = document.getElementById('filterGrade');
 
   if (searchInput) {
-    searchInput.addEventListener('input', () => renderStudentsTableWithPermissions(searchInput.value, gradeSelect ? gradeSelect.value : 'all'));
+    searchInput.addEventListener('input', () => renderStudentsTable(searchInput.value, gradeSelect ? gradeSelect.value : 'all'));
   }
 
   if (gradeSelect) {
-    gradeSelect.addEventListener('change', () => renderStudentsTableWithPermissions(searchInput ? searchInput.value : '', gradeSelect.value));
+    gradeSelect.addEventListener('change', () => renderStudentsTable(searchInput ? searchInput.value : '', gradeSelect.value));
   }
 
   const btnExportJSON = document.getElementById('btnExportJSON');
