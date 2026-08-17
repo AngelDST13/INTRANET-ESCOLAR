@@ -324,21 +324,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // CONTROL DE ROLES Y PRIVILEGIOS DE VISTA
   // ==========================================
 
-  let currentUser = JSON.parse(localStorage.getItem('userSession')) || {
+  const currentUser = JSON.parse(localStorage.getItem('userSession')) || {
     name: 'Angel Salazar',
-    role: 'ADMIN',
+    role: 'TUTOR',
     childId: '118230491'
   };
-
-  const roleSimSelect = document.getElementById('roleSimSelect');
-  if (roleSimSelect) {
-    roleSimSelect.value = currentUser.role || 'ADMIN';
-    roleSimSelect.addEventListener('change', (e) => {
-      currentUser.role = e.target.value;
-      localStorage.setItem('userSession', JSON.stringify(currentUser));
-      applyRolePermissions();
-    });
-  }
 
   function applyRolePermissions() {
     const currentRole = currentUser.role ? currentUser.role.toUpperCase() : 'ESTUDIANTE';
@@ -357,17 +347,6 @@ document.addEventListener('DOMContentLoaded', () => {
       academicActions.forEach(btn => {
         if (btn) btn.style.display = 'none';
       });
-
-      const activeSection = document.querySelector('.dashboard-section:not([style*="display: none"])');
-      if (activeSection && (activeSection.id === 'section-usuarios' || activeSection.id === 'section-recursos')) {
-        document.querySelectorAll('.dashboard-section').forEach(sec => sec.style.display = 'none');
-        const tablonSection = document.getElementById('section-tablon');
-        if (tablonSection) tablonSection.style.display = 'block';
-
-        document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-        const tablonNav = document.querySelector('[data-section="tablon"]');
-        if (tablonNav) tablonNav.classList.add('active');
-      }
     } else {
       if (navUsers) navUsers.style.display = 'flex';
       if (navResources) navResources.style.display = 'flex';

@@ -161,3 +161,20 @@
 ### Cambios & Ajustes
 - Ocultamiento dinámico de secciones sensibles (Gestión de Usuarios) en la barra de navegación lateral para usuarios sin privilegios administrativos.
 - Deshabilitación de exportaciones masivas e ingreso de notas para el rol TUTOR.
+
+## [1.2.1] - 2026-08-16
+
+### Corregido
+- Filtro estricto de privacidad en el Módulo Académico para impedir la divulgación de calificaciones entre diferentes alumnos/tutores.
+- Ocultamiento de herramientas masivas de exportación e importación de datos en los perfiles TUTOR y ESTUDIANTE.
+
+### Añadido
+- Selector dinámico de simulación de roles en la barra superior para probar instantáneamente las vistas entre ADMIN, DOCENTE, TUTOR y ESTUDIANTE.
+
+## [1.2.2] - 2026-08-16
+
+### Removido
+- Se eliminó el selector manual de "Modo Vista" en el encabezado.
+
+### Corregido
+- El sistema ahora determina los permisos y visibilidad de secciones de forma automática según la sesión real iniciada (`userSession` en LocalStorage).
