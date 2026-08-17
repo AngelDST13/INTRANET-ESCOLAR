@@ -1463,3 +1463,30 @@ h1, h2, h3, h4, p, span, label {
   white-space: nowrap !important;
   min-width: 125px !important;
 }
+/* NOTIFICACIONES TOAST FLOTANTES */
+.custom-toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: slideIn 0.3s ease forwards;
+}
+
+.toast-success { background-color: #10b981; }
+.toast-warning { background-color: #f59e0b; }
+.toast-error   { background-color: #ef4444; }
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
